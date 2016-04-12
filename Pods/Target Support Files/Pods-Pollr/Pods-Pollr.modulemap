@@ -1,0 +1,6 @@
+framework module Pods_Pollr {
+  umbrella header "Pods-Pollr-umbrella.h"
+
+  export *
+  module * { export * }
+}
