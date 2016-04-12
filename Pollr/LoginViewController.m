@@ -52,6 +52,7 @@
     [_passwordField setAttributedPlaceholder:passwordString];
     _passwordField.textColor = [UIColor whiteColor];
     _passwordField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    [_passwordField setSecureTextEntry:YES];
     
     UIView *passwordBottomBorder = [[UIView alloc] initWithFrame:CGRectMake(20.0f, _passwordField.frame.origin.y + _passwordField.frame.size.height + 10, self.view.frame.size.width - 40, 1.0f)];
     [passwordBottomBorder setBackgroundColor:[UIColor whiteColor]];

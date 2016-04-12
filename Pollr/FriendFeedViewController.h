@@ -10,4 +10,6 @@
 
 @interface FriendFeedViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
+@property (nonatomic, strong) NSManagedObjectContext *context;
+
 @end

@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Message.h"
 
 @interface FriendMessageCell : UICollectionViewCell
+
+- (void)setMessage:(NSDictionary *)message;
 
 @end

@@ -119,6 +119,7 @@
         messageVC.context = context;
         
         FriendFeedViewController *friendVC = [[FriendFeedViewController alloc] init];
+        friendVC.context = context;
         
         UINavigationController *publicNC = [[UINavigationController alloc] initWithRootViewController:messageVC];
         publicNC.tabBarItem.title = @"Public";
@@ -196,6 +197,7 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     // FIXME: Bar disappears after logout
+    // FIXME: Login not possible after logout
     [self.navigationController.navigationBar setBarTintColor:nil];
 }
 

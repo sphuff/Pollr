@@ -9,8 +9,14 @@
 #import "FriendFeedViewController.h"
 #import "CardLayout.h"
 #import "FriendMessageCell.h"
+#import "Message.h"
+#import "PollrNetworkAPI.h"
+#import "Chameleon.h"
 
 @interface FriendFeedViewController ()
+
+@property (nonatomic, strong) NSArray *messageArray;
+@property (nonatomic, strong) NSMutableArray *colorArray;
 
 @end
 
@@ -34,6 +40,25 @@
     
     [collectionView registerClass:[FriendMessageCell class] forCellWithReuseIdentifier:@"friendCell"];
     
+    _colorArray = [[NSMutableArray alloc] init];
+    for(int i = 0; i < 50; i++){
+        UIColor *color = [UIColor randomFlatColor];
+        while([color isEqual:[UIColor flatWhiteColor]] || [color isEqual:[UIColor flatWhiteColorDark]]){
+            color = [UIColor randomFlatColor];
+        }
+        [_colorArray addObject:color];
+    }
+    
+    PollrNetworkAPI *api = [[PollrNetworkAPI alloc] init];
+    User *user = [api getUserWithContext:self.context];
+    
+    [api getMessagesForUser2:user WithCompletionHandler:^(NSArray *array) {
+        _messageArray = [NSArray arrayWithArray:array];
+        [collectionView reloadData];
+        
+    }];
+
+    
     
     [self.view addSubview:collectionView];
 }
@@ -46,7 +71,7 @@
 #pragma mark - UICollectionViewDataSource Methods
 - (NSInteger)collectionView:(UICollectionView *)collectionView
      numberOfItemsInSection:(NSInteger)section{
-    return 20;
+    return [_messageArray count];
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
@@ -56,7 +81,12 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     static NSString *identifier = @"friendCell";
+    
     FriendMessageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
+    cell.layer.shouldRasterize = YES;
+    cell.layer.rasterizationScale = [UIScreen mainScreen].scale;
+    [cell setBackgroundColor:[_colorArray objectAtIndex:([indexPath item]%50)]];
+    [cell setMessage:[_messageArray objectAtIndex:[indexPath item]]];
     return cell;
 }
 
