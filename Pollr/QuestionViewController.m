@@ -8,10 +8,6 @@
 
 #import "QuestionViewController.h"
 #import "HexColors.h"
-#import "LGPlusButtonsView.h"
-//#import "Chameleon.h"
-//#import <LiquidFloatingActionButton/LiquidFloatingActionButton-Swift.h>
-//#import "LiquidFloatingActionButton-Swift.h"
 
 @interface QuestionViewController (){
     int charactersLeft;
@@ -53,7 +49,7 @@
     _rightButton.enabled = NO;
     [_rightButton setTintColor:[UIColor whiteColor]];
     
-    [self.view setBackgroundColor:[UIColor hx_colorWithHexString:@"C5E1A5"]];
+    [self.view setBackgroundColor:[UIColor hx_colorWithHexRGBAString:@"C5E1A5"]];
     
     
     // set up nav bar
@@ -63,18 +59,18 @@
 //    label.shadowColor = [UIColor colorWithWhite:0.0 alpha:0.5];
     label.textAlignment = NSTextAlignmentCenter;
     // ^-Use UITextAlignmentCenter for older SDKs.
-    label.textColor = [UIColor hx_colorWithHexString:@"6482AD"];
+    label.textColor = [UIColor hx_colorWithHexRGBAString:@"6482AD"];
     self.navigationItem.titleView = label;
     [label setText:@"Poll"];
     [label sizeToFit];
     
     UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelButtonPressed)];
-    [leftButton setTintColor:[UIColor hx_colorWithHexString:@"6482AD"]];
+    [leftButton setTintColor:[UIColor hx_colorWithHexRGBAString:@"6482AD"]];
 
     self.navigationItem.leftBarButtonItem = leftButton;
     self.navigationItem.rightBarButtonItem = _rightButton;
     
-    [self.navigationController.navigationBar setBarTintColor:[UIColor hx_colorWithHexString:@"BEE99F"]];
+    [self.navigationController.navigationBar setBarTintColor:[UIColor hx_colorWithHexRGBAString:@"BEE99F"]];
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackOpaque];
     
     // set up the text view with placeholder text
@@ -87,7 +83,7 @@
     
     // set up text in the corner that displays the characters left
     _charactersLeftTextField = [[UITextField alloc] initWithFrame:originalLettersRemainingPosition];
-    _charactersLeftTextField.attributedText = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", charactersLeft] attributes:@{NSForegroundColorAttributeName: [UIColor hx_colorWithHexString:@"689F38"], NSFontAttributeName: _remainingLetterFont}];
+    _charactersLeftTextField.attributedText = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", charactersLeft] attributes:@{NSForegroundColorAttributeName: [UIColor hx_colorWithHexRGBAString:@"689F38"], NSFontAttributeName: _remainingLetterFont}];
     
     // set up add answer button
 //    _addAnswerButton = [[UIButton alloc] initWithFrame:originalAddAnswerButtonPosition];
@@ -98,80 +94,80 @@
     
     // can scale image here
 //    UIImage *plusImg = [UIImage imageNamed:@"plus"];
-    LGPlusButtonsView *FAB = [LGPlusButtonsView plusButtonsViewWithNumberOfButtons:3
-                                                         firstButtonIsPlusButton:YES
-                                                                   showAfterInit:YES
-                                                                   actionHandler:^(LGPlusButtonsView *plusButtonView, NSString *title, NSString *description, NSUInteger index)
-                            {
-                                NSLog(@"actionHandler | title: %@, description: %@, index: %lu", title, description, (long unsigned)index);
-                                if(index == 2){
-                                    NSLog(@"Touched the lock");
-                                    
-                                }
-                            }];
-    
-    //FAB.observedScrollView = self.scrollView;
-    FAB.coverColor = [UIColor colorWithWhite:1.f alpha:0.7];
-    FAB.position = LGPlusButtonsViewPositionBottomLeft;
-    FAB.plusButtonAnimationType = LGPlusButtonAnimationTypeRotate;
-    
-    [FAB setButtonsTitles:@[@"+", @"", @""] forState:UIControlStateNormal];
-    [FAB setDescriptionsTexts:@[@"", @"Add a response", @"Lock responses"]];
-    [FAB setButtonsImages:@[[NSNull new], [UIImage imageNamed:@"add44px"], [UIImage imageNamed:@"unlocked44px"]]
-                                  forState:UIControlStateNormal
-                            forOrientation:LGPlusButtonsViewOrientationAll];
-    
-    [FAB setButtonsAdjustsImageWhenHighlighted:NO];
-    [FAB setButtonsBackgroundColor:[UIColor colorWithRed:0.f green:0.5 blue:1.f alpha:1.f] forState:UIControlStateNormal];
-    [FAB setButtonsBackgroundColor:[UIColor colorWithRed:0.2 green:0.6 blue:1.f alpha:1.f] forState:UIControlStateHighlighted];
-    [FAB setButtonsBackgroundColor:[UIColor colorWithRed:0.2 green:0.6 blue:1.f alpha:1.f] forState:UIControlStateHighlighted|UIControlStateSelected];
-    [FAB setButtonsSize:CGSizeMake(44.f, 44.f) forOrientation:LGPlusButtonsViewOrientationAll];
-    [FAB setButtonsLayerCornerRadius:44.f/2.f forOrientation:LGPlusButtonsViewOrientationAll];
-    [FAB setButtonsTitleFont:[UIFont boldSystemFontOfSize:24.f] forOrientation:LGPlusButtonsViewOrientationAll];
-    [FAB setButtonsLayerShadowColor:[UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:1.f]];
-    [FAB setButtonsLayerShadowOpacity:0.5];
-    [FAB setButtonsLayerShadowRadius:3.f];
-    [FAB setButtonsLayerShadowOffset:CGSizeMake(0.f, 2.f)];
-    [FAB setButtonAtIndex:0 size:CGSizeMake(56.f, 56.f)
-                            forOrientation:(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? LGPlusButtonsViewOrientationPortrait : LGPlusButtonsViewOrientationAll)];
-    [FAB setButtonAtIndex:0 layerCornerRadius:56.f/2.f
-                            forOrientation:(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? LGPlusButtonsViewOrientationPortrait : LGPlusButtonsViewOrientationAll)];
-    [FAB setButtonAtIndex:0 titleFont:[UIFont systemFontOfSize:40.f]
-                            forOrientation:(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? LGPlusButtonsViewOrientationPortrait : LGPlusButtonsViewOrientationAll)];
-    [FAB setButtonAtIndex:0 titleOffset:CGPointMake(0.f, -3.f) forOrientation:LGPlusButtonsViewOrientationAll];
-    [FAB setButtonAtIndex:1 backgroundColor:[UIColor colorWithRed:1.f green:0.f blue:0.5 alpha:1.f] forState:UIControlStateNormal];
-    [FAB setButtonAtIndex:1 backgroundColor:[UIColor colorWithRed:1.f green:0.2 blue:0.6 alpha:1.f] forState:UIControlStateHighlighted];
-    [FAB setButtonAtIndex:2 backgroundColor:[UIColor colorWithRed:1.f green:0.5 blue:0.f alpha:1.f] forState:UIControlStateNormal];
-    [FAB setButtonAtIndex:2 backgroundColor:[UIColor colorWithRed:1.f green:0.6 blue:0.2 alpha:1.f] forState:UIControlStateHighlighted];
-    [FAB setButtonAtIndex:2 backgroundImage:[UIImage imageNamed:@"locked44px"] forState:UIControlStateHighlighted];
-//    [FAB setButtonAtIndex:3 backgroundColor:[UIColor colorWithRed:0.f green:0.7 blue:0.f alpha:1.f] forState:UIControlStateNormal];
-//    [FAB setButtonAtIndex:3 backgroundColor:[UIColor colorWithRed:0.f green:0.8 blue:0.f alpha:1.f] forState:UIControlStateHighlighted];
-    
-    [FAB setDescriptionsBackgroundColor:[UIColor whiteColor]];
-    [FAB setDescriptionsTextColor:[UIColor blackColor]];
-    [FAB setDescriptionsLayerShadowColor:[UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:1.f]];
-    [FAB setDescriptionsLayerShadowOpacity:0.25];
-    [FAB setDescriptionsLayerShadowRadius:1.f];
-    [FAB setDescriptionsLayerShadowOffset:CGSizeMake(0.f, 1.f)];
-    [FAB setDescriptionsLayerCornerRadius:6.f forOrientation:LGPlusButtonsViewOrientationAll];
-    [FAB setDescriptionsContentEdgeInsets:UIEdgeInsetsMake(4.f, 8.f, 4.f, 8.f) forOrientation:LGPlusButtonsViewOrientationAll];
-    
-    for (NSUInteger i=1; i<=2; i++)
-        [FAB setButtonAtIndex:i offset:CGPointMake(6.f, 0.f)
-                                forOrientation:(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? LGPlusButtonsViewOrientationPortrait : LGPlusButtonsViewOrientationAll)];
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-    {
-        [FAB setButtonAtIndex:0 titleOffset:CGPointMake(0.f, -2.f) forOrientation:LGPlusButtonsViewOrientationLandscape];
-        [FAB setButtonAtIndex:0 titleFont:[UIFont systemFontOfSize:32.f] forOrientation:LGPlusButtonsViewOrientationLandscape];
-    }
-    
-    [self.navigationController.view addSubview:FAB];
-    
-
-    [self.view addSubview:_textView];
-    [self.view addSubview:_charactersLeftTextField];
-    [self.view addSubview:FAB];
+//    LGPlusButtonsView *FAB = [LGPlusButtonsView plusButtonsViewWithNumberOfButtons:3
+//                                                         firstButtonIsPlusButton:YES
+//                                                                   showAfterInit:YES
+//                                                                   actionHandler:^(LGPlusButtonsView *plusButtonView, NSString *title, NSString *description, NSUInteger index)
+//                            {
+//                                NSLog(@"actionHandler | title: %@, description: %@, index: %lu", title, description, (long unsigned)index);
+//                                if(index == 2){
+//                                    NSLog(@"Touched the lock");
+//                                    
+//                                }
+//                            }];
+//    
+//    //FAB.observedScrollView = self.scrollView;
+//    FAB.coverColor = [UIColor colorWithWhite:1.f alpha:0.7];
+//    FAB.position = LGPlusButtonsViewPositionBottomLeft;
+//    FAB.plusButtonAnimationType = LGPlusButtonAnimationTypeRotate;
+//    
+//    [FAB setButtonsTitles:@[@"+", @"", @""] forState:UIControlStateNormal];
+//    [FAB setDescriptionsTexts:@[@"", @"Add a response", @"Lock responses"]];
+//    [FAB setButtonsImages:@[[NSNull new], [UIImage imageNamed:@"add44px"], [UIImage imageNamed:@"unlocked44px"]]
+//                                  forState:UIControlStateNormal
+//                            forOrientation:LGPlusButtonsViewOrientationAll];
+//    
+//    [FAB setButtonsAdjustsImageWhenHighlighted:NO];
+//    [FAB setButtonsBackgroundColor:[UIColor colorWithRed:0.f green:0.5 blue:1.f alpha:1.f] forState:UIControlStateNormal];
+//    [FAB setButtonsBackgroundColor:[UIColor colorWithRed:0.2 green:0.6 blue:1.f alpha:1.f] forState:UIControlStateHighlighted];
+//    [FAB setButtonsBackgroundColor:[UIColor colorWithRed:0.2 green:0.6 blue:1.f alpha:1.f] forState:UIControlStateHighlighted|UIControlStateSelected];
+//    [FAB setButtonsSize:CGSizeMake(44.f, 44.f) forOrientation:LGPlusButtonsViewOrientationAll];
+//    [FAB setButtonsLayerCornerRadius:44.f/2.f forOrientation:LGPlusButtonsViewOrientationAll];
+//    [FAB setButtonsTitleFont:[UIFont boldSystemFontOfSize:24.f] forOrientation:LGPlusButtonsViewOrientationAll];
+//    [FAB setButtonsLayerShadowColor:[UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:1.f]];
+//    [FAB setButtonsLayerShadowOpacity:0.5];
+//    [FAB setButtonsLayerShadowRadius:3.f];
+//    [FAB setButtonsLayerShadowOffset:CGSizeMake(0.f, 2.f)];
+//    [FAB setButtonAtIndex:0 size:CGSizeMake(56.f, 56.f)
+//                            forOrientation:(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? LGPlusButtonsViewOrientationPortrait : LGPlusButtonsViewOrientationAll)];
+//    [FAB setButtonAtIndex:0 layerCornerRadius:56.f/2.f
+//                            forOrientation:(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? LGPlusButtonsViewOrientationPortrait : LGPlusButtonsViewOrientationAll)];
+//    [FAB setButtonAtIndex:0 titleFont:[UIFont systemFontOfSize:40.f]
+//                            forOrientation:(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? LGPlusButtonsViewOrientationPortrait : LGPlusButtonsViewOrientationAll)];
+//    [FAB setButtonAtIndex:0 titleOffset:CGPointMake(0.f, -3.f) forOrientation:LGPlusButtonsViewOrientationAll];
+//    [FAB setButtonAtIndex:1 backgroundColor:[UIColor colorWithRed:1.f green:0.f blue:0.5 alpha:1.f] forState:UIControlStateNormal];
+//    [FAB setButtonAtIndex:1 backgroundColor:[UIColor colorWithRed:1.f green:0.2 blue:0.6 alpha:1.f] forState:UIControlStateHighlighted];
+//    [FAB setButtonAtIndex:2 backgroundColor:[UIColor colorWithRed:1.f green:0.5 blue:0.f alpha:1.f] forState:UIControlStateNormal];
+//    [FAB setButtonAtIndex:2 backgroundColor:[UIColor colorWithRed:1.f green:0.6 blue:0.2 alpha:1.f] forState:UIControlStateHighlighted];
+//    [FAB setButtonAtIndex:2 backgroundImage:[UIImage imageNamed:@"locked44px"] forState:UIControlStateHighlighted];
+////    [FAB setButtonAtIndex:3 backgroundColor:[UIColor colorWithRed:0.f green:0.7 blue:0.f alpha:1.f] forState:UIControlStateNormal];
+////    [FAB setButtonAtIndex:3 backgroundColor:[UIColor colorWithRed:0.f green:0.8 blue:0.f alpha:1.f] forState:UIControlStateHighlighted];
+//    
+//    [FAB setDescriptionsBackgroundColor:[UIColor whiteColor]];
+//    [FAB setDescriptionsTextColor:[UIColor blackColor]];
+//    [FAB setDescriptionsLayerShadowColor:[UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:1.f]];
+//    [FAB setDescriptionsLayerShadowOpacity:0.25];
+//    [FAB setDescriptionsLayerShadowRadius:1.f];
+//    [FAB setDescriptionsLayerShadowOffset:CGSizeMake(0.f, 1.f)];
+//    [FAB setDescriptionsLayerCornerRadius:6.f forOrientation:LGPlusButtonsViewOrientationAll];
+//    [FAB setDescriptionsContentEdgeInsets:UIEdgeInsetsMake(4.f, 8.f, 4.f, 8.f) forOrientation:LGPlusButtonsViewOrientationAll];
+//    
+//    for (NSUInteger i=1; i<=2; i++)
+//        [FAB setButtonAtIndex:i offset:CGPointMake(6.f, 0.f)
+//                                forOrientation:(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? LGPlusButtonsViewOrientationPortrait : LGPlusButtonsViewOrientationAll)];
+//    
+//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+//    {
+//        [FAB setButtonAtIndex:0 titleOffset:CGPointMake(0.f, -2.f) forOrientation:LGPlusButtonsViewOrientationLandscape];
+//        [FAB setButtonAtIndex:0 titleFont:[UIFont systemFontOfSize:32.f] forOrientation:LGPlusButtonsViewOrientationLandscape];
+//    }
+//    
+//    [self.navigationController.view addSubview:FAB];
+//    
+//
+//    [self.view addSubview:_textView];
+//    [self.view addSubview:_charactersLeftTextField];
+//    [self.view addSubview:FAB];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -179,7 +175,7 @@
     // Dispose of any resources that can be recreated.
 }
 - (void) drawTextField{
-    _charactersLeftTextField.attributedText = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", charactersLeft] attributes:@{NSForegroundColorAttributeName: [UIColor hx_colorWithHexString:@"9BD672"], NSFontAttributeName: _remainingLetterFont}];
+    _charactersLeftTextField.attributedText = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", charactersLeft] attributes:@{NSForegroundColorAttributeName: [UIColor hx_colorWithHexRGBAString:@"9BD672"], NSFontAttributeName: _remainingLetterFont}];
 }
 
 - (void)addAnswerButtonPressed{

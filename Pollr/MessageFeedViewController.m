@@ -34,8 +34,8 @@
 -(void)viewDidLoad{
     [super viewDidLoad];
     _api = [[PollrNetworkAPI alloc] init];
-    _backgroundColor = [UIColor hx_colorWithHexString:@"E4DCDC"];
-    [self.navigationController.navigationBar setBarTintColor:[UIColor hx_colorWithHexString:@"BEE99F"]];
+    _backgroundColor = [UIColor hx_colorWithHexRGBAString:@"E4DCDC"];
+    [self.navigationController.navigationBar setBarTintColor:[UIColor hx_colorWithHexRGBAString:@"BEE99F"]];
     
 
     viewWidth = self.view.frame.size.width;
@@ -82,7 +82,7 @@
     
     [self.collectionView registerClass:[PublicMessageCell class] forCellWithReuseIdentifier:@"messageCell"];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logout)];
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor hx_colorWithHexString:@"6482AD"];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor hx_colorWithHexRGBAString:@"6482AD"];
     
 }
 
@@ -124,7 +124,7 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {    
-    PublicMessageCell *selectedCell = [self.collectionView cellForItemAtIndexPath:indexPath];
+    PublicMessageCell *selectedCell = (PublicMessageCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
     
     CGRect frame = selectedCell.frame;
     UIColor *cellColor = selectedCell.backgroundColor;

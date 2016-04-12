@@ -87,11 +87,13 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-Pollr/AFNetworking.framework"
   install_framework "Pods-Pollr/CHTCollectionViewWaterfallLayout.framework"
   install_framework "Pods-Pollr/ChameleonFramework.framework"
+  install_framework "Pods-Pollr/HexColors.framework"
   install_framework "Pods-Pollr/LGPlusButtonsView.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-Pollr/AFNetworking.framework"
   install_framework "Pods-Pollr/CHTCollectionViewWaterfallLayout.framework"
   install_framework "Pods-Pollr/ChameleonFramework.framework"
+  install_framework "Pods-Pollr/HexColors.framework"
   install_framework "Pods-Pollr/LGPlusButtonsView.framework"
 fi

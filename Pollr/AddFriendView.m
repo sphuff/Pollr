@@ -7,7 +7,8 @@
 //
 
 #import "AddFriendView.h"
-#import "HexColors.h"
+#import <HexColors/HexColors.h>
+
 
 @implementation AddFriendView
 
@@ -21,7 +22,7 @@
 
 -(instancetype)initWithFrame:(CGRect)frame{
     AddFriendView *view = [super initWithFrame:frame];
-    [view setBackgroundColor:[UIColor hx_colorWithHexString:@"9BD672"]];
+    [view setBackgroundColor:[UIColor hx_colorWithHexRGBAString:@"9BD672"]];
     
     UIFont *textFieldFont = [UIFont fontWithName:@"Helvetica" size:12.0];
     UIFont *buttonFont = [UIFont fontWithName:@"Helvetica" size:20.0];
@@ -44,7 +45,7 @@
     addFriendButton.layer.cornerRadius = 5.0;
     [addFriendButton setAttributedTitle:[[NSAttributedString alloc] initWithString:@"Add Friend" attributes:buttonAttributes] forState:UIControlStateNormal];
     [addFriendButton addTarget:self action:@selector(addFriendButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    [addFriendButton setBackgroundColor:[UIColor hx_colorWithHexString:@"549426"]];
+    [addFriendButton setBackgroundColor:[UIColor hx_colorWithHexRGBAString:@"549426"]];
     
     [view addSubview:addFriendButton];
 

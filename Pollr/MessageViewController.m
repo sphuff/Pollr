@@ -29,7 +29,7 @@
 -(void)viewDidLoad{
     [self.view addSubview:_messageView];
     
-    [self.view setBackgroundColor:[UIColor hx_colorWithHexString:@"E4DCDC"]]; // same color as MessageFeedViewController
+    [self.view setBackgroundColor:[UIColor hx_colorWithHexRGBAString:@"E4DCDC"]]; // same color as MessageFeedViewController
     _answerDict = [_messageDict objectForKey:@"answers"];
 //    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"] style:UIBarButtonItemStyleDone target:self action:nil];
 //    [self.navigationItem setLeftBarButtonItem:backButton];

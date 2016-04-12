@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "HexColors.h"
+#import <HexColors/HexColors.h>
 #import "Chameleon.h"
 #import "AppDelegate.h"
 #import "SignupViewController.h"
@@ -15,7 +15,6 @@
 #import "MessageFeedViewController.h"
 #import "PublicMessageCell.h"
 #import "User.h"
-#import "UIERealTimeBlurView.h"
 #import "LoginPopover.h"
 #import "PollrNetworkAPI.h"
 #import "LoginViewController.h"
@@ -36,7 +35,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     _api = [[PollrNetworkAPI alloc] init];
-    [self.view setBackgroundColor:[UIColor hx_colorWithHexString:@"BEE99F"]];
+    [self.view setBackgroundColor:[UIColor hx_colorWithHexRGBAString:@"BEE99F"]];
     
     
     // set up rounded UIView at bottom
@@ -109,7 +108,6 @@
     
     User *user = [_api getUserWithContext:context];
     if(!user){
-//        LoginPopover *loginPopover = [self setUpLoginView];
         LoginViewController *loginVC = [[LoginViewController alloc] init];
         AppDelegate *appDel = [[UIApplication sharedApplication] delegate];
         NSManagedObjectContext *context = [appDel managedObjectContext];
@@ -139,7 +137,7 @@
         
         [UIView animateWithDuration:0.33 animations:^{
             _popupView.frame = CGRectMake(0, frameHeight, self.view.frame.size.width, self.view.frame.size.height);
-            [_popupView setBackgroundColor:[UIColor hx_colorWithHexString:@"E4DCDC"]];
+            [_popupView setBackgroundColor:[UIColor hx_colorWithHexRGBAString:@"E4DCDC"]];
             [_loginButton setAlpha:0.0];
             [_signupButton setAlpha:0.0];
             [_loginTextView setAlpha:0.0];
@@ -161,7 +159,7 @@
 
 /**
  * @brief Blurs the current view, and creates the login popover view
- */
+ 
 - (LoginPopover *)setUpLoginView{
     UIERealTimeBlurView *blurView = [[UIERealTimeBlurView alloc] initWithFrame:CGRectIntegral(self.view.frame)];
     blurView.tintColor = [UIColor blackColor];
@@ -184,6 +182,7 @@
     [blurView addSubview:loginView];
     return loginView;
 }
+ */
 
 - (void)signupButtonPressed{
     NSLog(@"Signup pressed");

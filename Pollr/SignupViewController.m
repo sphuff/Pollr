@@ -44,7 +44,7 @@
     self.navigationItem.leftBarButtonItem = cancelButton;// use self's navigationItem since it is connected programmatically
 
     
-    [self.view setBackgroundColor:[UIColor hx_colorWithHexString:@"9BD672"]];
+    [self.view setBackgroundColor:[UIColor hx_colorWithHexRGBAString:@"9BD672"]];
     
     CGRect usernameFieldFrame = CGRectMake(40, (self.view.frame.size.height/2) - (3*(10 + self.view.frame.size.height/20)), self.view.frame.size.width - 80, self.view.frame.size.height/20);
     _usernameField = [[UITextField alloc] initWithFrame:usernameFieldFrame];
@@ -75,7 +75,7 @@
     signupButton.layer.cornerRadius = 5.0;
     [signupButton setAttributedTitle:[[NSAttributedString alloc] initWithString:@"Sign Up" attributes:buttonAttributes] forState:UIControlStateNormal];
     [signupButton addTarget:self action:@selector(signupButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    [signupButton setBackgroundColor:[UIColor hx_colorWithHexString:@"549426"]];
+    [signupButton setBackgroundColor:[UIColor hx_colorWithHexRGBAString:@"549426"]];
     
     
     [self.view addSubview:_usernameField];
