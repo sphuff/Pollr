@@ -12,11 +12,13 @@
 #import "Message.h"
 #import "PollrNetworkAPI.h"
 #import "Chameleon.h"
+#import "AddFriendViewController.h"
 
 @interface FriendFeedViewController ()
 
 @property (nonatomic, strong) NSArray *messageArray;
 @property (nonatomic, strong) NSMutableArray *colorArray;
+@property (nonatomic, strong) UICollectionView *collectionView;
 
 @end
 
@@ -31,14 +33,24 @@
     [self setAutomaticallyAdjustsScrollViewInsets:NO];
     
     int collectionViewY = self.navigationController.navigationBar.frame.size.height + self.navigationController.navigationBar.frame.origin.y + 100;
-    int collectionViewHeight = self.view.frame.size.height - collectionViewY;
-    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, collectionViewY, self.view.frame.size.width, collectionViewHeight) collectionViewLayout:flowLayout];
-    [collectionView setBackgroundColor:[UIColor greenColor]];
-    collectionView.dataSource = self;
-    collectionView.delegate = self;
+    int collectionViewHeight = self.view.frame.size.height - collectionViewY - self.tabBarController.tabBar.frame.size.height;
+    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, collectionViewY, self.view.frame.size.width, collectionViewHeight) collectionViewLayout:flowLayout];
+    [_collectionView setBackgroundColor:[UIColor greenColor]];
+    _collectionView.dataSource = self;
+    _collectionView.delegate = self;
+    
+    
+    UIButton *addFriendButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+    [addFriendButton setImage:[UIImage imageNamed:@"adduser25px"] forState:UIControlStateNormal];
+    [addFriendButton addTarget:self action:@selector(addFriendButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIView *addFriendButtonView = [[UIView alloc] initWithFrame:addFriendButton.frame];
+    addFriendButtonView.bounds = CGRectOffset(addFriendButton.frame, -5, -5);
+    [addFriendButtonView addSubview:addFriendButton];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:addFriendButtonView];
 
     
-    [collectionView registerClass:[FriendMessageCell class] forCellWithReuseIdentifier:@"friendCell"];
+    [_collectionView registerClass:[FriendMessageCell class] forCellWithReuseIdentifier:@"friendCell"];
     
     _colorArray = [[NSMutableArray alloc] init];
     for(int i = 0; i < 50; i++){
@@ -54,13 +66,13 @@
     
     [api getMessagesForUser2:user WithCompletionHandler:^(NSArray *array) {
         _messageArray = [NSArray arrayWithArray:array];
-        [collectionView reloadData];
+        [_collectionView reloadData];
         
     }];
 
     
     
-    [self.view addSubview:collectionView];
+    [self.view addSubview:_collectionView];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -125,6 +137,13 @@ didDeselectItemAtIndexPath:(NSIndexPath *)indexPath{
 //{
 //    return UIEdgeInsetsMake(5.0, 2.0, 10, 2.0);
 //}
+
+- (void)addFriendButtonPressed{
+    NSLog(@"Add friend button");
+    AddFriendViewController *addFriendVC = [[AddFriendViewController alloc] init];
+    
+    [self.navigationController pushViewController:addFriendVC animated:YES];
+}
 
 
 
