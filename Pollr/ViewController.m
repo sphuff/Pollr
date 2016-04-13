@@ -199,6 +199,7 @@
     // FIXME: Bar disappears after logout
     // FIXME: Login not possible after logout
     [self.navigationController.navigationBar setBarTintColor:nil];
+    [self.navigationController setNavigationBarHidden:NO];
 }
 
 - (void)didReceiveMemoryWarning {
