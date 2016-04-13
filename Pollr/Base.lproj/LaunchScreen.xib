@@ -2,7 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10116"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -11,15 +11,21 @@
             <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UJK-uJ-HCz">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UJK-uJ-HCz">
                     <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
                     <color key="backgroundColor" red="0.69411764705882351" green="0.84313725490196079" blue="0.55294117647058827" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="UJK-uJ-HCz" secondAttribute="trailing" id="98P-j9-BfK"/>
+                <constraint firstItem="UJK-uJ-HCz" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="LTm-qu-i3h"/>
+                <constraint firstAttribute="bottom" secondItem="UJK-uJ-HCz" secondAttribute="bottom" id="ddF-Ln-s6v"/>
+                <constraint firstItem="UJK-uJ-HCz" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="l04-Gr-VQk"/>
+            </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="548" y="455"/>
+            <point key="canvasLocation" x="310" y="489"/>
         </view>
     </objects>
 </document>
