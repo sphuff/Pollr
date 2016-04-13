@@ -38,4 +38,6 @@
 
 - (void)sendPublicMessage:(NSDictionary *)message;
 
+- (void)findUsersWithUsername:(NSString *) username WithCompletionHandler:(void (^)(NSArray *users)) completion;
+
 @end

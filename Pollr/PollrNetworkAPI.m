@@ -289,6 +289,27 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
     }] resume];
 }
 
+- (void)findUsersWithUsername:(NSString *) username WithCompletionHandler:(void (^)(NSArray *users)) completion{
+    if(!_config){
+        _config = [NSURLSessionConfiguration defaultSessionConfiguration];
+        _manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:_config];
+    }
+    NSString *url = [NSString stringWithFormat:@"%@/allUsers/%@", BASE_URL, username];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
+    
+    [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        NSArray *userArray;
+        if(error){
+            NSLog(@"LOOKUP ERROR: %@", [error localizedDescription]);
+        } else {
+            // need to scan for length
+            NSArray *responseArray = (NSArray *)responseObject;
+            userArray = responseArray;
+        }
+        completion(userArray);
+    }] resume];
+}
+
 
 
 

@@ -43,7 +43,7 @@
     _defaultFont = [UIFont fontWithName:@"Helvetica" size:20.0];
     _remainingLetterFont = [UIFont fontWithName:@"Helvetica" size:30.0];
     originalLettersRemainingPosition = CGRectMake(self.view.frame.size.width-60, (self.view.frame.size.height - self.tabBarController.tabBar.frame.size.height)-50, 60,30);
-    NSLog(@"x: \t %f y: %f\t width: %f\t height: %f", originalLettersRemainingPosition.origin.x, originalLettersRemainingPosition.origin.y, originalLettersRemainingPosition.size.width, originalLettersRemainingPosition.size.height);
+
     originalAddAnswerButtonPosition = CGRectMake(self.view.frame.size.width/20, self.view.frame.size.height-(circleButtonHeight + 20), circleButtonHeight, circleButtonHeight);
     originalLockAnswerButtonPosition = CGRectMake(self.view.frame.size.width/20 + circleButtonHeight + 20, self.view.frame.size.height - (circleButtonHeight + 20), circleButtonHeight, circleButtonHeight);
     _rightButton = [[UIBarButtonItem alloc] initWithTitle:@"Post" style:UIBarButtonItemStylePlain target:self action:@selector(postButtonPressed)];
