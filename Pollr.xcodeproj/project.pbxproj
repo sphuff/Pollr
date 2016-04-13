@@ -40,6 +40,7 @@
 		DC8DE4E71C753AC700813662 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8DE4E61C753AC700813662 /* User.m */; };
 		DC96110A1C7AD4F000DB112D /* LoginPopover.m in Sources */ = {isa = PBXBuildFile; fileRef = DC9611091C7AD4F000DB112D /* LoginPopover.m */; };
 		DC96110D1C7ADCE000DB112D /* PollrUser.m in Sources */ = {isa = PBXBuildFile; fileRef = DC96110C1C7ADCE000DB112D /* PollrUser.m */; };
+		DC981D891CBDE9DA0043AC16 /* AddFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC981D881CBDE9DA0043AC16 /* AddFriendViewController.m */; };
 		DC9FE5D11C7D4B7A00321EA6 /* password3.svg in Resources */ = {isa = PBXBuildFile; fileRef = DC9FE5D01C7D4B7A00321EA6 /* password3.svg */; };
 		DC9FE5D31C7D4CAF00321EA6 /* user_icon.svg in Resources */ = {isa = PBXBuildFile; fileRef = DC9FE5D21C7D4CAF00321EA6 /* user_icon.svg */; };
 		DC9FE5D51C7D4D4000321EA6 /* user_icon2.svg in Resources */ = {isa = PBXBuildFile; fileRef = DC9FE5D41C7D4D4000321EA6 /* user_icon2.svg */; };
@@ -134,6 +135,8 @@
 		DC9611091C7AD4F000DB112D /* LoginPopover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginPopover.m; sourceTree = "<group>"; };
 		DC96110B1C7ADCE000DB112D /* PollrUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PollrUser.h; sourceTree = "<group>"; };
 		DC96110C1C7ADCE000DB112D /* PollrUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PollrUser.m; sourceTree = "<group>"; };
+		DC981D871CBDE9DA0043AC16 /* AddFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFriendViewController.h; sourceTree = "<group>"; };
+		DC981D881CBDE9DA0043AC16 /* AddFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFriendViewController.m; sourceTree = "<group>"; };
 		DC9FE5D01C7D4B7A00321EA6 /* password3.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = password3.svg; sourceTree = "<group>"; };
 		DC9FE5D21C7D4CAF00321EA6 /* user_icon.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = user_icon.svg; sourceTree = "<group>"; };
 		DC9FE5D41C7D4D4000321EA6 /* user_icon2.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = user_icon2.svg; sourceTree = "<group>"; };
@@ -255,6 +258,8 @@
 				DC3B80401CB6B5B40065BB3E /* FriendMessageCell.m */,
 				DC3B80421CB6B5F70065BB3E /* CardLayout.h */,
 				DC3B80431CB6B5F70065BB3E /* CardLayout.m */,
+				DC981D871CBDE9DA0043AC16 /* AddFriendViewController.h */,
+				DC981D881CBDE9DA0043AC16 /* AddFriendViewController.m */,
 			);
 			name = "Friend Feed";
 			sourceTree = "<group>";
@@ -590,6 +595,7 @@
 				DC707D221C6BB2B50088FAA2 /* PublicMessageCell.m in Sources */,
 				DCC08A601CA5D2BB002CB49C /* LoginViewController.m in Sources */,
 				DC4412661C73FCCA0059E5EA /* Answer.m in Sources */,
+				DC981D891CBDE9DA0043AC16 /* AddFriendViewController.m in Sources */,
 				DCBAF1591C21E9D700F05D5D /* ViewController.m in Sources */,
 				DC44125F1C73FC030059E5EA /* Message+CoreDataProperties.m in Sources */,
 				DC3B80441CB6B5F70065BB3E /* CardLayout.m in Sources */,
