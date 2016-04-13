@@ -10,5 +10,6 @@
 
 @interface QuestionViewController : UIViewController <UITextViewDelegate>
 
+@property (nonatomic) BOOL isPublic;
 
 @end

@@ -113,6 +113,8 @@
 - (void) postButtonPressed{
     NSLog(@"Pressed post button");
     QuestionViewController *questionVC = [[QuestionViewController alloc] init];
+    questionVC.isPublic = YES;
+    
     [self.navigationController pushViewController:questionVC animated:NO];
 }
 

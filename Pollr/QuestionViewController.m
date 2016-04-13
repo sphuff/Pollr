@@ -42,14 +42,13 @@
     circleButtonHeight = 50;
     _defaultFont = [UIFont fontWithName:@"Helvetica" size:20.0];
     _remainingLetterFont = [UIFont fontWithName:@"Helvetica" size:30.0];
-    originalLettersRemainingPosition = CGRectMake(self.view.frame.size.width-60, self.view.frame.size.height-50, 60,30);
+    originalLettersRemainingPosition = CGRectMake(self.view.frame.size.width-60, (self.view.frame.size.height - self.tabBarController.tabBar.frame.size.height)-50, 60,30);
+    NSLog(@"x: \t %f y: %f\t width: %f\t height: %f", originalLettersRemainingPosition.origin.x, originalLettersRemainingPosition.origin.y, originalLettersRemainingPosition.size.width, originalLettersRemainingPosition.size.height);
     originalAddAnswerButtonPosition = CGRectMake(self.view.frame.size.width/20, self.view.frame.size.height-(circleButtonHeight + 20), circleButtonHeight, circleButtonHeight);
     originalLockAnswerButtonPosition = CGRectMake(self.view.frame.size.width/20 + circleButtonHeight + 20, self.view.frame.size.height - (circleButtonHeight + 20), circleButtonHeight, circleButtonHeight);
     _rightButton = [[UIBarButtonItem alloc] initWithTitle:@"Post" style:UIBarButtonItemStylePlain target:self action:@selector(postButtonPressed)];
     _rightButton.enabled = NO;
     [_rightButton setTintColor:[UIColor whiteColor]];
-    
-    [self.view setBackgroundColor:[UIColor hx_colorWithHexRGBAString:@"C5E1A5"]];
     
     
     // set up nav bar
@@ -165,8 +164,8 @@
 //    [self.navigationController.view addSubview:FAB];
 //    
 //
-//    [self.view addSubview:_textView];
-//    [self.view addSubview:_charactersLeftTextField];
+    [self.view addSubview:_textView];
+    [self.view addSubview:_charactersLeftTextField];
 //    [self.view addSubview:FAB];
 }
 
@@ -175,7 +174,11 @@
     // Dispose of any resources that can be recreated.
 }
 - (void) drawTextField{
-    _charactersLeftTextField.attributedText = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", charactersLeft] attributes:@{NSForegroundColorAttributeName: [UIColor hx_colorWithHexRGBAString:@"9BD672"], NSFontAttributeName: _remainingLetterFont}];
+//    _charactersLeftTextField.attributedText = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", charactersLeft] attributes:@{NSForegroundColorAttributeName: [UIColor hx_colorWithHexRGBAString:@"9BD672"], NSFontAttributeName: _remainingLetterFont}];
+    float red = (155 + ((200 - charactersLeft)/200.0f) *  100);
+    float green = (214 - ((200 - charactersLeft)/200.0f) * 164);
+    float blue = (114 - ((200 - charactersLeft)/200.0f) * 14);
+    _charactersLeftTextField.attributedText = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", charactersLeft] attributes:@{NSForegroundColorAttributeName: [UIColor hx_colorWith8BitRed:(int)red green:(int)green blue:(int)blue], NSFontAttributeName: _remainingLetterFont}];
 }
 
 - (void)addAnswerButtonPressed{
@@ -208,6 +211,10 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)
                                                  name:UIKeyboardDidShowNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasHidden:)
+                                                 name:UIKeyboardDidHideNotification
                                                object:nil];
     [textView becomeFirstResponder];
 }
@@ -257,12 +264,16 @@
         int height = MIN(keyboardSize.height,keyboardSize.width);
         int width = MAX(keyboardSize.height,keyboardSize.width);
         
-        keyboardLettersRemainingPosition = CGRectMake(width - 60, self.view.frame.size.height - height - 30, 60, 30);
+        keyboardLettersRemainingPosition = CGRectMake(width - 60, originalLettersRemainingPosition.origin.y - height, 60, 30);
         keyboardAddAnswerButtonPosition = CGRectMake(width/20, self.view.frame.size.height - height - circleButtonHeight, circleButtonHeight, circleButtonHeight);
     }
     
     _charactersLeftTextField.frame = keyboardLettersRemainingPosition;
     _addAnswerButton.frame = keyboardAddAnswerButtonPosition;
+}
+
+- (void)keyboardWasHidden: (NSNotification *)notification{
+    _charactersLeftTextField.frame = originalLettersRemainingPosition;
 }
 
 #pragma mark - Segue methods
@@ -274,7 +285,12 @@
 
 - (void)postButtonPressed
 {
-
+    NSLog(@"Post button pressed");
+    if (self.isPublic) {
+        NSLog(@"Public message");
+    } else {
+        NSLog(@"Private message");
+    }
 }
 
 /*

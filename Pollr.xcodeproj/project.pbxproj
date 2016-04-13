@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		8D17F76CFD098F09378564A8 /* Pods_Pollr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA44114F668FB335584E9704 /* Pods_Pollr.framework */; };
-		DC0D6C1C1C3751E200BB1098 /* AddFriendView.m in Sources */ = {isa = PBXBuildFile; fileRef = DC0D6C1B1C3751E200BB1098 /* AddFriendView.m */; };
 		DC0D6C1E1C37545000BB1098 /* add_friend.png in Resources */ = {isa = PBXBuildFile; fileRef = DC0D6C1D1C37545000BB1098 /* add_friend.png */; };
 		DC0D6C201C37553A00BB1098 /* add_friend20px.png in Resources */ = {isa = PBXBuildFile; fileRef = DC0D6C1F1C37553A00BB1098 /* add_friend20px.png */; };
 		DC105E791C694ED400A6F8B3 /* MessageFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC105E781C694ED400A6F8B3 /* MessageFeedViewController.m */; };
@@ -89,8 +88,6 @@
 		70FB46F4B051F0D8427137DD /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		8FC3D29D7C5394DFC496EC17 /* Pods-Pollr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pollr.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Pollr/Pods-Pollr.debug.xcconfig"; sourceTree = "<group>"; };
 		A8B09559003B43B32C110628 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		DC0D6C1A1C3751E200BB1098 /* AddFriendView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFriendView.h; sourceTree = "<group>"; };
-		DC0D6C1B1C3751E200BB1098 /* AddFriendView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFriendView.m; sourceTree = "<group>"; };
 		DC0D6C1D1C37545000BB1098 /* add_friend.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add_friend.png; sourceTree = "<group>"; };
 		DC0D6C1F1C37553A00BB1098 /* add_friend20px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add_friend20px.png; sourceTree = "<group>"; };
 		DC105E771C694ED400A6F8B3 /* MessageFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageFeedViewController.h; sourceTree = "<group>"; };
@@ -319,8 +316,6 @@
 				DCBAF1AA1C21ED8400F05D5D /* QuestionViewController.h */,
 				DCBAF1AB1C21ED8400F05D5D /* QuestionViewController.m */,
 				DC5743391CB5F4AE008C5B10 /* Friend Feed */,
-				DC0D6C1A1C3751E200BB1098 /* AddFriendView.h */,
-				DC0D6C1B1C3751E200BB1098 /* AddFriendView.m */,
 				DCBAF15D1C21E9D700F05D5D /* Images.xcassets */,
 				DCBAF15F1C21E9D700F05D5D /* LaunchScreen.xib */,
 				DC772BA71C33499D0001E4D1 /* Images */,
@@ -601,7 +596,6 @@
 				DC3B80441CB6B5F70065BB3E /* CardLayout.m in Sources */,
 				DCBAF1561C21E9D700F05D5D /* AppDelegate.m in Sources */,
 				DC57433C1CB5F4F6008C5B10 /* FriendFeedViewController.m in Sources */,
-				DC0D6C1C1C3751E200BB1098 /* AddFriendView.m in Sources */,
 				DCF5EE301C6445BB007839AA /* PollrNetworkAPI.m in Sources */,
 				DCCB69081C6D22EA00E41614 /* MessageViewController.m in Sources */,
 				DC8DE4E71C753AC700813662 /* User.m in Sources */,
