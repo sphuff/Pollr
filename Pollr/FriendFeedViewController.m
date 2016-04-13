@@ -12,7 +12,9 @@
 #import "Message.h"
 #import "PollrNetworkAPI.h"
 #import "Chameleon.h"
+#import <HexColors/HexColors.h>
 #import "AddFriendViewController.h"
+#import "QuestionViewController.h"
 
 @interface FriendFeedViewController ()
 
@@ -28,6 +30,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self.view setBackgroundColor:[UIColor blackColor]];
+    [self.navigationController.navigationBar setBarTintColor:[UIColor hx_colorWithHexRGBAString:@"BEE99F"]];
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     [self setAutomaticallyAdjustsScrollViewInsets:NO];
@@ -41,13 +44,22 @@
     
     
     UIButton *addFriendButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-    [addFriendButton setImage:[UIImage imageNamed:@"adduser25px"] forState:UIControlStateNormal];
+    [addFriendButton setImage:[UIImage imageNamed:@"adduser_blue25px"] forState:UIControlStateNormal];
     [addFriendButton addTarget:self action:@selector(addFriendButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
     UIView *addFriendButtonView = [[UIView alloc] initWithFrame:addFriendButton.frame];
     addFriendButtonView.bounds = CGRectOffset(addFriendButton.frame, -5, -5);
     [addFriendButtonView addSubview:addFriendButton];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:addFriendButtonView];
+    
+    UIButton *postButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+    [postButton setImage:[UIImage imageNamed:@"airplane_blue50px"] forState:UIControlStateNormal];
+    [postButton addTarget:self action:@selector(postButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIView *postButtonView = [[UIView alloc] initWithFrame:postButton.frame];
+    postButtonView.bounds = CGRectOffset(postButton.frame, -5, -5);
+    [postButtonView addSubview:postButton];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:postButtonView];
 
     
     [_collectionView registerClass:[FriendMessageCell class] forCellWithReuseIdentifier:@"friendCell"];
@@ -143,6 +155,15 @@ didDeselectItemAtIndexPath:(NSIndexPath *)indexPath{
     AddFriendViewController *addFriendVC = [[AddFriendViewController alloc] init];
     
     [self.navigationController pushViewController:addFriendVC animated:YES];
+}
+
+- (void)postButtonPressed{
+    NSLog(@"Post button pressed");
+    
+    QuestionViewController *questionVC = [[QuestionViewController alloc] init];
+    questionVC.isPublic = NO;
+    
+    [self.navigationController pushViewController:questionVC animated:YES];
 }
 
 

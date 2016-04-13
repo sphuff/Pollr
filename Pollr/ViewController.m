@@ -86,13 +86,6 @@
     icon.frame = CGRectMake(iconX, iconY, 200, 200);
     [self.view addSubview:icon];
     
-//    int logoY = icon.frame.origin.y + icon.frame.size.height + 10;
-//    UITextField *logoText = [[UITextField alloc] initWithFrame:CGRectMake(0, logoY, 100, 100)];
-//    UIFont *logoFont = [UIFont fontWithName:@"Roboto" size:20.0];
-//    logoText.attributedText = [[NSAttributedString alloc] initWithString:@"Pollr" attributes:@{NSFontAttributeName: logoFont}];
-//    
-//    [self.view addSubview:logoText];
-    
     // add to views
     [_popupView addSubview:_loginButton];
     [_popupView addSubview:_loginTextView];
@@ -113,7 +106,7 @@
         NSManagedObjectContext *context = [appDel managedObjectContext];
         loginVC.context = context;
         
-        [self.navigationController pushViewController:loginVC animated:NO];
+        [self.navigationController pushViewController:loginVC animated:YES];
     } else {
         MessageFeedViewController *messageVC = [[MessageFeedViewController alloc] init];
         messageVC.context = context;
@@ -158,33 +151,6 @@
     }
 }
 
-/**
- * @brief Blurs the current view, and creates the login popover view
- 
-- (LoginPopover *)setUpLoginView{
-    UIERealTimeBlurView *blurView = [[UIERealTimeBlurView alloc] initWithFrame:CGRectIntegral(self.view.frame)];
-    blurView.tintColor = [UIColor blackColor];
-    [self.view addSubview:blurView];
-    
-    int loginViewWidth = (4*self.view.frame.size.width)/5;
-    int loginViewHeight = self.view.frame.size.height/3;
-    int loginViewX = (self.view.frame.size.width - (4*self.view.frame.size.width)/5) / 2;
-    int loginViewY = self.view.frame.size.height/5;
-    LoginPopover *loginView;
-    
-    CGRect loginViewFrame = CGRectIntegral(CGRectMake(loginViewX, loginViewY, loginViewWidth, loginViewHeight));
-    loginView = [[LoginPopover alloc] initWithFrame:loginViewFrame];
-    loginView.subviewArray = [[NSMutableArray alloc] initWithObjects:blurView, nil];
-    
-    AppDelegate *appDel = [[UIApplication sharedApplication] delegate];
-    NSManagedObjectContext *context = [appDel managedObjectContext];
-    loginView.context = context;
-    loginView.navController = self.navigationController;
-    [blurView addSubview:loginView];
-    return loginView;
-}
- */
-
 - (void)signupButtonPressed{
     NSLog(@"Signup pressed");
     SignupViewController *signup = [[SignupViewController alloc] init];
@@ -196,8 +162,6 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated{
-    // FIXME: Bar disappears after logout
-    // FIXME: Login not possible after logout
     [self.navigationController.navigationBar setBarTintColor:nil];
     [self.navigationController setNavigationBarHidden:NO];
 }
