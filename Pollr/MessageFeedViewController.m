@@ -203,7 +203,8 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"User"];
     [_api deleteUsersWithContext:self.context];
     ViewController *VC = [[ViewController alloc] init];
-    [self presentViewController:VC animated:NO completion:nil];
+//    [self presentViewController:VC animated:NO completion:nil];
+    [self.tabBarController.navigationController popToRootViewControllerAnimated:YES];
 }
 
 
