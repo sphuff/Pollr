@@ -1,5 +1,5 @@
 //
-//  User+CoreDataProperties.m
+//  Friend+CoreDataProperties.h
 //  Pollr
 //
 //  Created by Stephen Huffnagle on 4/14/16.
@@ -9,14 +9,14 @@
 //  to delete and recreate this implementation file for your updated model.
 //
 
-#import "User+CoreDataProperties.h"
+#import "Friend.h"
 
-@implementation User (CoreDataProperties)
+NS_ASSUME_NONNULL_BEGIN
 
-@dynamic email;
-@dynamic password;
-@dynamic username;
-@dynamic messages;
-@dynamic friends;
+@interface Friend (CoreDataProperties)
+
+@property (nullable, nonatomic, retain) NSString *username;
 
 @end
+
+NS_ASSUME_NONNULL_END

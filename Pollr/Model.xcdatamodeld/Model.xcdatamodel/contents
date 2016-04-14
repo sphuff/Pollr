@@ -6,7 +6,7 @@
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="message" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Message" syncable="YES"/>
     </entity>
-    <entity name="Friend" syncable="YES">
+    <entity name="Friend" representedClassName="Friend" syncable="YES">
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="Message" representedClassName="Message" syncable="YES">
@@ -26,6 +26,6 @@
         <element name="Answer" positionX="214" positionY="210" width="128" height="105"/>
         <element name="Friend" positionX="142" positionY="90" width="128" height="58"/>
         <element name="Message" positionX="-335" positionY="207" width="128" height="105"/>
-        <element name="User" positionX="-54" positionY="5" width="128" height="120"/>
+        <element name="User" positionX="-54" positionY="5" width="128" height="118"/>
     </elements>
 </model>

@@ -10,4 +10,6 @@
 
 @interface AddFriendViewController : UIViewController <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
 
+@property (nonatomic, strong) NSManagedObjectContext *context;
+
 @end

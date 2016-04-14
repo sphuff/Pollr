@@ -10,6 +10,7 @@
 #import "User.h"
 #import "PollrUser.h"
 #import "Message.h"
+#import "Friend.h"
 
 @interface PollrNetworkAPI : NSObject
 

@@ -145,11 +145,6 @@ didDeselectItemAtIndexPath:(NSIndexPath *)indexPath{
     return size;
 }
 
-//- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
-//{
-//    return UIEdgeInsetsMake(5.0, 2.0, 10, 2.0);
-//}
-
 - (void)addFriendButtonPressed{
     NSLog(@"Add friend button");
     AddFriendViewController *addFriendVC = [[AddFriendViewController alloc] init];

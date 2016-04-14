@@ -19,12 +19,17 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *email;
 @property (nullable, nonatomic, retain) NSString *password;
 @property (nullable, nonatomic, retain) NSString *username;
-@property (nullable, nonatomic, retain) NSOrderedSet<Message *> *messages;
 @property (nullable, nonatomic, retain) NSSet<Friend *> *friends;
+@property (nullable, nonatomic, retain) NSOrderedSet<Message *> *messages;
 
 @end
 
 @interface User (CoreDataGeneratedAccessors)
+
+- (void)addFriendsObject:(Friend *)value;
+- (void)removeFriendsObject:(Friend *)value;
+- (void)addFriends:(NSSet<Friend *> *)values;
+- (void)removeFriends:(NSSet<Friend *> *)values;
 
 - (void)insertObject:(Message *)value inMessagesAtIndex:(NSUInteger)idx;
 - (void)removeObjectFromMessagesAtIndex:(NSUInteger)idx;
@@ -36,11 +41,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeMessagesObject:(Message *)value;
 - (void)addMessages:(NSOrderedSet<Message *> *)values;
 - (void)removeMessages:(NSOrderedSet<Message *> *)values;
-
-- (void)addFriendsObject:(Friend *)value;
-- (void)removeFriendsObject:(Friend *)value;
-- (void)addFriends:(NSSet<Friend *> *)values;
-- (void)removeFriends:(NSSet<Friend *> *)values;
 
 @end
 

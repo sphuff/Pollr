@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIERealTimeBlurView.h"
 
 @interface LoginPopover : UIView
 

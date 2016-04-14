@@ -1,5 +1,5 @@
 //
-//  User+CoreDataProperties.m
+//  Friend+CoreDataProperties.m
 //  Pollr
 //
 //  Created by Stephen Huffnagle on 4/14/16.
@@ -9,14 +9,10 @@
 //  to delete and recreate this implementation file for your updated model.
 //
 
-#import "User+CoreDataProperties.h"
+#import "Friend+CoreDataProperties.h"
 
-@implementation User (CoreDataProperties)
+@implementation Friend (CoreDataProperties)
 
-@dynamic email;
-@dynamic password;
 @dynamic username;
-@dynamic messages;
-@dynamic friends;
 
 @end

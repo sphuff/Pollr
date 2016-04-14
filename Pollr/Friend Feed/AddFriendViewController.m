@@ -56,6 +56,11 @@
 
 - (void)addFriendButtonPressed:(UIButton *)sender{
     NSLog(@"Selected cell %ld", (long)sender.tag);
+    User *currentUser = [_api getUserWithContext:self.context];
+    
+    Friend *newFriend = [NSEntityDescription insertNewObjectForEntityForName:@"Friend" inManagedObjectContext:self.context];
+    [currentUser.friends setByAddingObject:newFriend];
+    NSLog(@"Set: %@", currentUser.friends);
 }
 #pragma mark - UITextFieldDelegate Methods
 

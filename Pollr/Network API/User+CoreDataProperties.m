@@ -16,7 +16,7 @@
 @dynamic email;
 @dynamic password;
 @dynamic username;
-@dynamic messages;
 @dynamic friends;
+@dynamic messages;
 
 @end
