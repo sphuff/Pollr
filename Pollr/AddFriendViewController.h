@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AddFriendViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
+@interface AddFriendViewController : UIViewController <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
 
 @end

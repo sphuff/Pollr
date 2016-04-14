@@ -9,6 +9,8 @@
 #import "AddFriendViewController.h"
 #import <HexColors/HexColors.h>
 #import "PollrNetworkAPI.h"
+#import "Chameleon.h"
+#import "SHTextField.h"
 
 @interface AddFriendViewController ()
 
@@ -26,11 +28,12 @@
     int textX = 0;
     int textY = self.navigationController.navigationBar.frame.size.height + self.navigationController.navigationBar.frame.origin.y;
     int textHeight = 50;
-    UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(textX, textY, self.view.frame.size.width, textHeight)];
-    [textView setBackgroundColor:[UIColor blueColor]];
+    SHTextField *textField = [[SHTextField alloc] initWithFrame:CGRectMake(textX, textY, self.view.frame.size.width, textHeight)];
+    [textField setBackgroundColor:[UIColor flatMintColor]];
+    [textField setPlaceholder:@"Search"];
     
-    textView.delegate = self;
-    textView.contentInset = UIEdgeInsetsMake(0, 0, 0, 5);
+    textField.delegate = self;
+
     
     int tableViewY = textHeight + 10 + textY;
     int tableViewHeight = self.view.frame.size.height - tableViewY - self.tabBarController.tabBar.frame.size.height;
@@ -40,7 +43,7 @@
     _tableView.dataSource = self;
     
     [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"addFriendCell"];
-    [self.view addSubview:textView];
+    [self.view addSubview:textField];
     [self.view addSubview:_tableView];
     
     _api = [[PollrNetworkAPI alloc] init];
@@ -54,6 +57,34 @@
 - (void)addFriendButtonPressed:(UIButton *)sender{
     NSLog(@"Selected cell %ld", (long)sender.tag);
 }
+#pragma mark - UITextFieldDelegate Methods
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    return YES;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    [textField becomeFirstResponder];
+}
+
+- (BOOL)textField:(UITextField *)textField
+shouldChangeCharactersInRange:(NSRange)range
+replacementString:(NSString *)string
+{
+    if([string isEqualToString:@"\n"]){
+        [textField resignFirstResponder];
+    }
+    [_api findUsersWithUsername:[textField text] WithCompletionHandler:^(NSArray *users) {
+        _userArray = users;
+        [_tableView reloadData];
+    }];
+    
+    return YES;
+}
+
+
 #pragma mark - UITextViewDelegate Methods
 - (void)textViewDidChange:(UITextView *)textView
 {

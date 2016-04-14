@@ -35,6 +35,7 @@
 		DC772BA61C3344520001E4D1 /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = DC772BA51C3344520001E4D1 /* plus.png */; };
 		DC772BAA1C3349B40001E4D1 /* locked.png in Resources */ = {isa = PBXBuildFile; fileRef = DC772BA81C3349B40001E4D1 /* locked.png */; };
 		DC772BAB1C3349B40001E4D1 /* unlocked.png in Resources */ = {isa = PBXBuildFile; fileRef = DC772BA91C3349B40001E4D1 /* unlocked.png */; };
+		DC78F5651CC00D0200759990 /* SHTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = DC78F5641CC00D0200759990 /* SHTextField.m */; };
 		DC8DE4DE1C75397F00813662 /* User+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8DE4DD1C75397F00813662 /* User+CoreDataProperties.m */; };
 		DC8DE4E71C753AC700813662 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8DE4E61C753AC700813662 /* User.m */; };
 		DC96110A1C7AD4F000DB112D /* LoginPopover.m in Sources */ = {isa = PBXBuildFile; fileRef = DC9611091C7AD4F000DB112D /* LoginPopover.m */; };
@@ -124,6 +125,8 @@
 		DC772BA51C3344520001E4D1 /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
 		DC772BA81C3349B40001E4D1 /* locked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = locked.png; sourceTree = "<group>"; };
 		DC772BA91C3349B40001E4D1 /* unlocked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unlocked.png; sourceTree = "<group>"; };
+		DC78F5631CC00D0200759990 /* SHTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHTextField.h; sourceTree = "<group>"; };
+		DC78F5641CC00D0200759990 /* SHTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHTextField.m; sourceTree = "<group>"; };
 		DC8DE4DC1C75397F00813662 /* User+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "User+CoreDataProperties.h"; sourceTree = "<group>"; };
 		DC8DE4DD1C75397F00813662 /* User+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "User+CoreDataProperties.m"; sourceTree = "<group>"; };
 		DC8DE4E51C753AC700813662 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
@@ -257,6 +260,8 @@
 				DC3B80431CB6B5F70065BB3E /* CardLayout.m */,
 				DC981D871CBDE9DA0043AC16 /* AddFriendViewController.h */,
 				DC981D881CBDE9DA0043AC16 /* AddFriendViewController.m */,
+				DC78F5631CC00D0200759990 /* SHTextField.h */,
+				DC78F5641CC00D0200759990 /* SHTextField.m */,
 			);
 			name = "Friend Feed";
 			sourceTree = "<group>";
@@ -597,6 +602,7 @@
 				DCBAF1561C21E9D700F05D5D /* AppDelegate.m in Sources */,
 				DC57433C1CB5F4F6008C5B10 /* FriendFeedViewController.m in Sources */,
 				DCF5EE301C6445BB007839AA /* PollrNetworkAPI.m in Sources */,
+				DC78F5651CC00D0200759990 /* SHTextField.m in Sources */,
 				DCCB69081C6D22EA00E41614 /* MessageViewController.m in Sources */,
 				DC8DE4E71C753AC700813662 /* User.m in Sources */,
 				DC308A0A1C71340D00637977 /* AnswerCell.m in Sources */,
