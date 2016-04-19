@@ -211,9 +211,7 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
             NSDictionary *dict = (NSDictionary *)responseObject;
             NSArray *messagesRaw = (NSArray *)[[(NSArray *)dict firstObject] objectForKey:@"messages"];
             NSMutableArray *messagesCore = [[NSMutableArray alloc] init];
-//            for (Message *message in messagesRaw) {
-//                message.title =
-//            }
+
             NSLog(@"messages: %@", messagesRaw);
             NSOrderedSet<Message *> *set = [[NSOrderedSet alloc] initWithArray:messagesCore];
             completion(set);
@@ -320,8 +318,6 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
     NSString *url = [NSString stringWithFormat:@"%@/addFriendFor%@", BASE_URL, user.username];
     NSArray *friendArray = [[NSArray alloc] initWithObjects:friend.username, nil];// must be an NSArray or NSDictionary
     NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:friendArray error:nil];
-    NSLog(@"request: %@", request);
-    NSLog(@"Body: %@", request.HTTPBody);
     
     [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         BOOL success = NO;
@@ -335,6 +331,31 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
         completion(success);
     }] resume];
 }
+
+- (void)removeFriend:(Friend *)friend forUser:(User *) user WithCompletionHandler:(void (^)(BOOL successful)) completion
+{
+    if(!_config){
+        _config = [NSURLSessionConfiguration defaultSessionConfiguration];
+        _manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:_config];
+    }
+    
+    NSString *url = [NSString stringWithFormat:@"%@/removeFriendFor%@", BASE_URL, user.username];
+    NSArray *friendArray = [[NSArray alloc] initWithObjects:friend.username, nil];// must be an NSArray or NSDictionary
+    NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"DELETE" URLString:url parameters:friendArray error:nil];
+    
+    [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        BOOL success = NO;
+        if(error){
+            NSLog(@"SEND ERROR: %@", [error localizedDescription]);
+        } else {
+            NSDictionary *dict = (NSDictionary *)responseObject;
+            NSLog(@"response: %@", dict);
+            success = YES;
+        }
+        completion(success);
+    }] resume];
+}
+
 
 
 
