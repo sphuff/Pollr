@@ -11,5 +11,6 @@
 @interface QuestionViewController : UIViewController <UITextViewDelegate>
 
 @property (nonatomic) BOOL isPublic;
+@property (nonatomic, strong) NSManagedObjectContext *context;
 
 @end

@@ -28,6 +28,13 @@
     
     PollrNetworkAPI *api = [[PollrNetworkAPI alloc] init];
     User *currentUser = [api getUserWithContext:self.context];
+    
+    [api getFriendsforUser:currentUser WithCompletionHandler:^(NSArray *friendsArray) {
+        if(friendsArray){
+            _friendArray = friendsArray;
+            [self.tableView reloadData];
+        }
+    }];
 
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"friendCell"];
@@ -54,8 +61,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *identifier = @"friendCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
-    
-    // Configure the cell...
+    [cell.textLabel setText:[NSString stringWithFormat:@"%@",[_friendArray objectAtIndex:indexPath.item]]];
     
     return cell;
 }

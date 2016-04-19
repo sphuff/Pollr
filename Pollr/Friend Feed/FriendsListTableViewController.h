@@ -11,5 +11,6 @@
 @interface FriendsListTableViewController : UITableViewController
 
 @property (nonatomic, strong) NSManagedObjectContext *context;
+@property (nonatomic, strong) NSString *post;
 
 @end

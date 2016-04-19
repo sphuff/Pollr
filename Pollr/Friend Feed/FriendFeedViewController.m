@@ -92,6 +92,24 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)addFriendButtonPressed{
+    NSLog(@"Add friend button");
+    AddFriendViewController *addFriendVC = [[AddFriendViewController alloc] init];
+    addFriendVC.context = self.context;
+    
+    [self.navigationController pushViewController:addFriendVC animated:YES];
+}
+
+- (void)postButtonPressed{
+    NSLog(@"Post button pressed");
+    
+    QuestionViewController *questionVC = [[QuestionViewController alloc] init];
+    questionVC.isPublic = NO;
+    questionVC.context = self.context;
+    
+    [self.navigationController pushViewController:questionVC animated:YES];
+}
+
 #pragma mark - UICollectionViewDataSource Methods
 - (NSInteger)collectionView:(UICollectionView *)collectionView
      numberOfItemsInSection:(NSInteger)section{
@@ -145,22 +163,6 @@ didDeselectItemAtIndexPath:(NSIndexPath *)indexPath{
     return size;
 }
 
-- (void)addFriendButtonPressed{
-    NSLog(@"Add friend button");
-    AddFriendViewController *addFriendVC = [[AddFriendViewController alloc] init];
-    addFriendVC.context = self.context;
-    
-    [self.navigationController pushViewController:addFriendVC animated:YES];
-}
-
-- (void)postButtonPressed{
-    NSLog(@"Post button pressed");
-    
-    QuestionViewController *questionVC = [[QuestionViewController alloc] init];
-    questionVC.isPublic = NO;
-    
-    [self.navigationController pushViewController:questionVC animated:YES];
-}
 
 
 

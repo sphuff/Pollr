@@ -8,6 +8,7 @@
 
 #import "QuestionViewController.h"
 #import "HexColors.h"
+#import "Friend Feed/FriendsListTableViewController.h"
 
 @interface QuestionViewController (){
     int charactersLeft;
@@ -290,6 +291,11 @@
         NSLog(@"Public message");
     } else {
         NSLog(@"Private message");
+        FriendsListTableViewController *friendsList = [[FriendsListTableViewController alloc] init];
+        friendsList.context = self.context;
+        friendsList.post = [_textView text];
+        
+        [self.navigationController pushViewController:friendsList animated:YES];
     }
 }
 

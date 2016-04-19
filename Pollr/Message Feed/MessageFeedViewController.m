@@ -114,8 +114,17 @@
     NSLog(@"Pressed post button");
     QuestionViewController *questionVC = [[QuestionViewController alloc] init];
     questionVC.isPublic = YES;
+    questionVC.context = self.context;
     
     [self.navigationController pushViewController:questionVC animated:NO];
+}
+
+- (void)logout{
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"User"];
+    [_api deleteUsersWithContext:self.context];
+    ViewController *VC = [[ViewController alloc] init];
+    //    [self presentViewController:VC animated:NO completion:nil];
+    [self.tabBarController.navigationController popToRootViewControllerAnimated:YES];
 }
 
 # pragma mark - UICollectionViewDelegate
@@ -198,15 +207,6 @@
     CGFloat height = lineCount * 22 + 10 + 51;
     return CGSizeMake(viewWidth/2 - 30, height);
     
-}
-
-
-- (void)logout{
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"User"];
-    [_api deleteUsersWithContext:self.context];
-    ViewController *VC = [[ViewController alloc] init];
-//    [self presentViewController:VC animated:NO completion:nil];
-    [self.tabBarController.navigationController popToRootViewControllerAnimated:YES];
 }
 
 
