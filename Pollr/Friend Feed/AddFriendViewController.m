@@ -76,6 +76,10 @@
             NSLog(@"Not able to add friend");
         }
     }];
+    
+    [_api getFriendsforUser:currentUser WithCompletionHandler:^(NSArray *friendsArray) {
+        NSLog(@"Friends array: %@", friendsArray);
+    }];
 }
 #pragma mark - UITextFieldDelegate Methods
 

@@ -235,12 +235,7 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
         } else {
             NSDictionary *dict = (NSDictionary *)responseObject;
             NSArray *messagesRaw = (NSArray *)[[(NSArray *)dict firstObject] objectForKey:@"messages"];
-//            NSMutableArray *messagesCore = [[NSMutableArray alloc] init];
-//            //            for (Message *message in messagesRaw) {
-//            //                message.title =
-//            //            }
-//            NSLog(@"messages: %@", messagesRaw);
-//            NSOrderedSet<Message *> *set = [[NSOrderedSet alloc] initWithArray:messagesCore];
+
             completion(messagesRaw);
         }
     }] resume];
@@ -325,7 +320,6 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
             NSLog(@"SEND ERROR: %@", [error localizedDescription]);
         } else {
             NSDictionary *dict = (NSDictionary *)responseObject;
-            NSLog(@"response: %@", dict);
             success = YES;
         }
         completion(success);
@@ -349,13 +343,34 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
             NSLog(@"SEND ERROR: %@", [error localizedDescription]);
         } else {
             NSDictionary *dict = (NSDictionary *)responseObject;
-            NSLog(@"response: %@", dict);
             success = YES;
         }
         completion(success);
     }] resume];
 }
 
+- (void)getFriendsforUser:(User *) user WithCompletionHandler:(void (^)(NSArray *friendsArray)) completion
+{
+    if(!_config){
+        _config = [NSURLSessionConfiguration defaultSessionConfiguration];
+        _manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:_config];
+    }
+    
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc]
+                                    initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/friendsFor%@", BASE_URL, user.username]]];
+    
+    
+    [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        NSArray *friendsArray;
+        if(error){
+            NSLog(@"LOOKUP ERROR: %@", [error localizedDescription]);
+        } else {
+            friendsArray = (NSArray *)responseObject;
+        }
+        completion(friendsArray);
+    }] resume];
+}
 
 
 
