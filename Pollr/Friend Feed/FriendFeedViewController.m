@@ -148,6 +148,7 @@ didDeselectItemAtIndexPath:(NSIndexPath *)indexPath{
 - (void)addFriendButtonPressed{
     NSLog(@"Add friend button");
     AddFriendViewController *addFriendVC = [[AddFriendViewController alloc] init];
+    addFriendVC.context = self.context;
     
     [self.navigationController pushViewController:addFriendVC animated:YES];
 }

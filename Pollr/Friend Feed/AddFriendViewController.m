@@ -59,8 +59,23 @@
     User *currentUser = [_api getUserWithContext:self.context];
     
     Friend *newFriend = [NSEntityDescription insertNewObjectForEntityForName:@"Friend" inManagedObjectContext:self.context];
-    [currentUser.friends setByAddingObject:newFriend];
-    NSLog(@"Set: %@", currentUser.friends);
+    newFriend.username = [_userArray objectAtIndex:sender.tag];
+    
+    [_api addFriend:newFriend forUser:currentUser WithCompletionHandler:^(BOOL successful) {
+        if(successful){
+//            [currentUser.friends setByAddingObject:newFriend];
+//            NSError *error;
+//            [self.context save:&error];
+//            
+//            NSLog(@"Data: %@", currentUser.friends);
+//            for (Friend *friend in currentUser.friends) {
+//                NSLog(@"Friend: %@", friend.username);
+//            }
+            NSLog(@"Added friend: %@", newFriend.username);
+        } else {
+            NSLog(@"Not able to add friend");
+        }
+    }];
 }
 #pragma mark - UITextFieldDelegate Methods
 

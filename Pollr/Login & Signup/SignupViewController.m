@@ -112,12 +112,6 @@
     [_api signupWithUser:currentUser WithContext: _managedObjectContext AndWithCompletionHandler:^(BOOL signedUp, BOOL usernameTaken, BOOL serverProblem) {
         if(signedUp){
             NSLog(@"Signed Up!");
-//            NSError *error2;
-//            NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"User"];
-//            NSArray *results = [_managedObjectContext executeFetchRequest:request error:&error2];
-//            for (User *user in results) {
-//                NSLog(@"results: %@", user.username);
-//            }
         } else {
             if(usernameTaken){
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Uh Oh" message:@"This username is already in use. Please enter another one." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
