@@ -1,0 +1,29 @@
+{
+	"_id" : ObjectId("56ba8c357c71d54e38ba7b12"),
+	"username" : "Test1",
+	"password" : "password",
+	"email" : "email",
+	"friends" : "[]",
+	"messages" : [
+		{
+			"createdBy" : "Joe",
+			"dateCreated" : "now",
+			"title" : "Hi",
+			"answers" : {
+				"answer1" : "No",
+				"answer2" : "Ok",
+				"answer3" : "Yes"
+			}
+		},
+		{
+			"createdBy" : "Frank",
+			"dateCreated" : "now",
+			"title" : "Hello",
+			"answers" : {
+				"answer1" : "qwer",
+				"answer2" : "Sure",
+				"answer3" : "Nah"
+			}
+		}
+	]
+}
