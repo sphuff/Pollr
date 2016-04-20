@@ -194,28 +194,24 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
     }] resume];
 }
 
-- (void)getMessagesForUser:(User *)user WithCompletionHandler:(void (^)(NSOrderedSet<Message *> *messageSet)) completion{
+- (void)getMessagesForUser:(User *)user WithCompletionHandler:(void (^)(NSArray *messages)) completion{
     if(!_config){
         _config = [NSURLSessionConfiguration defaultSessionConfiguration];
         _manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:_config];
     }
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc]
-                                    initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/users/%@", BASE_URL, user.username]]];
+                                    initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/getPublicMessages", BASE_URL]]];
     
     
     [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        NSArray *messageArray;
         if(error){
             NSLog(@"LOOKUP ERROR: %@", [error localizedDescription]);
         } else {
-            NSDictionary *dict = (NSDictionary *)responseObject;
-            NSArray *messagesRaw = (NSArray *)[[(NSArray *)dict firstObject] objectForKey:@"messages"];
-            NSMutableArray *messagesCore = [[NSMutableArray alloc] init];
-
-            NSLog(@"messages: %@", messagesRaw);
-            NSOrderedSet<Message *> *set = [[NSOrderedSet alloc] initWithArray:messagesCore];
-            completion(set);
+            messageArray = (NSArray *)responseObject;
         }
+        completion(messageArray);
     }] resume];
 }
 
@@ -244,14 +240,16 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
 
 
 
-
-- (void)sendMessage:(NSDictionary *)message ToUser:(User *)user{
+// TODO : Work out private message structure
+- (void)sendMessage:(NSDictionary *)message ToUsers:(NSArray *)users fromUser:(User *)fromUser{
     if(!_config){
         _config = [NSURLSessionConfiguration defaultSessionConfiguration];
         _manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:_config];
     }
     
-    NSString *url = [NSString stringWithFormat:@"%@/sendMessageTo%@", BASE_URL, user.username];
+    NSDictionary *paramDict = @{@"createdBy": fromUser.username, @"dateCreated" : [NSDate date], @"text" : message, @"sentTo" : users};
+    NSString *url = [NSString stringWithFormat:@"%@/sendPrivateMessage", BASE_URL];
+    
     NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:message error:nil];
     
     [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
@@ -259,25 +257,29 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
             NSLog(@"SEND ERROR: %@", [error localizedDescription]);
         } else {
             NSDictionary *dict = (NSDictionary *)responseObject;
-            NSLog(@"response: %@", dict);
         }
     }] resume];
 }
-- (void)sendPublicMessage:(NSDictionary *)message {
+- (void)sendPublicMessage:(NSString *)message fromUser:(User *)user{
     if(!_config){
         _config = [NSURLSessionConfiguration defaultSessionConfiguration];
         _manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:_config];
     }
     
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"HH:mm.ss MM-dd-yyyy"];
+    NSString *stringDate = [dateFormatter stringFromDate:[NSDate date]];
+    NSLog(@"%@", stringDate);
+    
+    NSDictionary *paramDict = @{@"createdBy": user.username, @"dateCreated" : stringDate, @"text" : message};
     NSString *url = [NSString stringWithFormat:@"%@/sendPublicMessage", BASE_URL];
-    NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:message error:nil];
+    NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:paramDict error:nil];
     
     [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         if(error){
             NSLog(@"SEND ERROR: %@", [error localizedDescription]);
         } else {
             NSDictionary *dict = (NSDictionary *)responseObject;
-            NSLog(@"response: %@", dict);
         }
     }] resume];
 }

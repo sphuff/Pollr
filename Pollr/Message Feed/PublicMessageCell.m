@@ -37,7 +37,7 @@
 }
 
 - (void)setMessage:(NSDictionary *)message{
-    NSString *titleString = [message objectForKey:@"title"];
+    NSString *titleString = [message objectForKey:@"text"];
     NSAttributedString *titleLabelAtt = [[NSAttributedString alloc] initWithString:titleString
                                                                         attributes:@{NSFontAttributeName : [UIFont fontWithName:@"Helvetica" size:17.0],
                                                                                      NSForegroundColorAttributeName: [UIColor whiteColor]}];
@@ -57,7 +57,7 @@
     _userImageView.layer.borderWidth = 2.0;
     _userImageView.clipsToBounds = YES;
     UIColor *borderColor = [colorArray objectAtIndex:arc4random_uniform(5)];
-//    [_userImageView setBackgroundColor:[colorArray objectAtIndex:arc4random_uniform(5)]];
+
     _userImageView.layer.borderColor = borderColor.CGColor;
     [self addSubview:_userImageView];
 }

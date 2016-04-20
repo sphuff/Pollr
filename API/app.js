@@ -170,3 +170,18 @@ app.post('/sendPublicMessage', function(req, res){
       });
     });
 });
+
+app.get('/getPublicMessages', function(req, res){
+    MongoClient.connect('mongodb://127.0.0.1:27017/Pollr', function(err, db){
+      console.dir("Connected");
+      if(err) {
+        throw err;
+      }
+      var collection = db.collection('publicMessages');
+      collection.find().sort({"dateCreated": -1}).toArray( function (err, results){
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(results));
+        db.close();
+      });
+    });
+});

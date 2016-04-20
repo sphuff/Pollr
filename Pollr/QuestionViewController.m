@@ -9,6 +9,7 @@
 #import "QuestionViewController.h"
 #import "HexColors.h"
 #import "Friend Feed/FriendsListTableViewController.h"
+#import "Network API/PollrNetworkAPI.h"
 
 @interface QuestionViewController (){
     int charactersLeft;
@@ -30,6 +31,7 @@
 @property (nonatomic, strong) UIButton *lockAnswerButton;
 @property (nonatomic, strong) UITextView *textView;
 @property (nonatomic, strong) NSMutableArray *answerArray;
+@property (nonatomic, strong) PollrNetworkAPI *api;
 
 @end
 
@@ -38,6 +40,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // set up data fields
+    _api = [[PollrNetworkAPI alloc] init];
     charactersLeft = 200;
     answersAreLocked = false;
     circleButtonHeight = 50;
@@ -289,6 +292,8 @@
     NSLog(@"Post button pressed");
     if (self.isPublic) {
         NSLog(@"Public message");
+        User *currentUser = [_api getUserWithContext:self.context];
+        [_api sendPublicMessage:[_textView text] fromUser:currentUser];
     } else {
         NSLog(@"Private message");
         FriendsListTableViewController *friendsList = [[FriendsListTableViewController alloc] init];

@@ -134,11 +134,6 @@
                     User *currentUser = [api saveUser:user WithContext:self.context];
                     NSLog(@"Saved user");
                     
-                    // add Messages to User entity
-                    [api getMessagesForUser:currentUser WithCompletionHandler:^(NSOrderedSet<Message *> *messageSet) {
-                        NSLog(@"Called get Messages");
-                    }];
-                    
                     MessageFeedViewController *messageVC = [[MessageFeedViewController alloc] init];
                     messageVC.context = self.context;
                     

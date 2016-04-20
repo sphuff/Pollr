@@ -32,12 +32,12 @@
 
 - (void)isValidUsername:(NSString *) username WithCompletionHandler:(void (^)(BOOL validUsername, BOOL serverProblem)) completion;
 
-- (void)getMessagesForUser:(User *)user WithCompletionHandler:(void (^)(NSOrderedSet<Message *> *messageSet)) completion;
+- (void)getMessagesForUser:(User *)user WithCompletionHandler:(void (^)(NSArray *messages)) completion;
 - (void)getMessagesForUser2:(User *)user WithCompletionHandler:(void (^)(NSArray *messages)) completion;
 
 - (void)sendMessage:(NSDictionary *)message ToUser:(User *)user;
 
-- (void)sendPublicMessage:(NSDictionary *)message;
+- (void)sendPublicMessage:(NSString *)message fromUser:(User *)user;
 
 - (void)findUsersWithUsername:(NSString *) username WithCompletionHandler:(void (^)(NSArray *users)) completion;
 

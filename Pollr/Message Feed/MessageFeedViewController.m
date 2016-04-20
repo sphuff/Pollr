@@ -64,10 +64,9 @@
     
     User *user = [_api getUserWithContext:self.context];
     
-    [_api getMessagesForUser2:user WithCompletionHandler:^(NSArray *array) {
+    [_api getMessagesForUser:user WithCompletionHandler:^(NSArray *array) {
         _messageArray = [NSArray arrayWithArray:array];
         [self.collectionView reloadData];
-        
     }];
     NSDate *date = [NSDate date];
     
@@ -203,8 +202,8 @@
             lineCount++;
         }
     }
-//    CGFloat height = lineCount * 22 + 10 + arc4random_uniform(20) + 51;
-    CGFloat height = lineCount * 22 + 10 + 51;
+    CGFloat height = lineCount * 22 + 10 + arc4random_uniform(20) + 61;
+//    CGFloat height = lineCount * 22 + 10 + 51;
     return CGSizeMake(viewWidth/2 - 30, height);
     
 }
