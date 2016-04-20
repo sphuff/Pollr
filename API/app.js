@@ -178,10 +178,31 @@ app.get('/getPublicMessages', function(req, res){
         throw err;
       }
       var collection = db.collection('publicMessages');
-      collection.find().sort({"dateCreated": -1}).toArray( function (err, results){
+      collection.find().sort({"dateCreated": -1}).toArray(function (err, results){
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(results));
         db.close();
       });
+    });
+});
+
+app.get('/getPrivateMessagesFor:user', function(req, res){
+    MongoClient.connect('mongodb://127.0.0.1:27017/Pollr', function(err, db){
+      console.dir("Connected");
+      if(err) {
+        throw err;
+      }
+      var collection = db.collection('users');
+      collection.aggregate([ 
+        {$unwind : "$messages"}, 
+        {$match : {"username" : req.params.user}}, 
+        {$project : {_id : 0, id : "$messages.id", 
+        "createdBy" : "$messages.createdBy", "dateCreated": "$messages.dateCreated",
+         "title": "$messages.title", "answers": "$messages.answers"}}
+         ], function(err, results){
+              res.setHeader('Content-Type', 'application/json');
+              res.send(JSON.stringify(results));
+              db.close();
+         });
     });
 });

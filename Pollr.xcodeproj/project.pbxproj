@@ -327,7 +327,6 @@
 			isa = PBXGroup;
 			children = (
 				DC5743391CB5F4AE008C5B10 /* Friend Feed */,
-				DC772BA71C33499D0001E4D1 /* Images */,
 				DC0D6C191C3736A400BB1098 /* Login & Signup */,
 				DCC7D1801C6BEF400050ECBE /* Message Feed */,
 				DCF5EE2D1C644536007839AA /* Network API */,
@@ -337,6 +336,7 @@
 				DC4412551C73A9240059E5EA /* Model.xcdatamodeld */,
 				DCBAF1AA1C21ED8400F05D5D /* QuestionViewController.h */,
 				DCBAF1AB1C21ED8400F05D5D /* QuestionViewController.m */,
+				DC772BA71C33499D0001E4D1 /* Images */,
 			);
 			path = Pollr;
 			sourceTree = "<group>";

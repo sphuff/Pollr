@@ -76,13 +76,11 @@
     PollrNetworkAPI *api = [[PollrNetworkAPI alloc] init];
     User *user = [api getUserWithContext:self.context];
     
-    [api getMessagesForUser2:user WithCompletionHandler:^(NSArray *array) {
-        _messageArray = [NSArray arrayWithArray:array];
+    [api getPrivateMessagesForUser:user WithCompletionHandler:^(NSArray *messages) {
+        _messageArray = [NSArray arrayWithArray:messages];
         [_collectionView reloadData];
-        
     }];
 
-    
     
     [self.view addSubview:_collectionView];
 }

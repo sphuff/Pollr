@@ -64,25 +64,25 @@
     
     User *user = [_api getUserWithContext:self.context];
     
-    [_api getMessagesForUser:user WithCompletionHandler:^(NSArray *array) {
-        _messageArray = [NSArray arrayWithArray:array];
+    [_api getPublicMessagesForUser:user WithCompletionHandler:^(NSArray *messages) {
+        _messageArray = [NSArray arrayWithArray:messages];
         [self.collectionView reloadData];
     }];
-    NSDate *date = [NSDate date];
-    
-    NSDictionary *dict = @{@"createdBy" : user.username,
-                           @"dateCreated" : [date description],
-                           @"title" : @"Tested",
-                           @"answers" :
-                               @{@"answer1" : @"No",
-                                   @"answer2" : @"Ok",
-                                   @"answer3" : @"Yes"
-                                 }};
     
     [self.collectionView registerClass:[PublicMessageCell class] forCellWithReuseIdentifier:@"messageCell"];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logout)];
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor hx_colorWithHexRGBAString:@"6482AD"];
     
+}
+
+- (void) viewWillAppear:(BOOL)animated{
+    // TODO: Fix repeating UIImage
+    User *user = [_api getUserWithContext:self.context];
+    
+    [_api getPublicMessagesForUser:user WithCompletionHandler:^(NSArray *messages) {
+        _messageArray = [NSArray arrayWithArray:messages];
+        [self.collectionView reloadData];
+    }];
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{

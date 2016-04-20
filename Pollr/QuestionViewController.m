@@ -294,6 +294,8 @@
         NSLog(@"Public message");
         User *currentUser = [_api getUserWithContext:self.context];
         [_api sendPublicMessage:[_textView text] fromUser:currentUser];
+        
+        [self.navigationController popViewControllerAnimated:YES];
     } else {
         NSLog(@"Private message");
         FriendsListTableViewController *friendsList = [[FriendsListTableViewController alloc] init];

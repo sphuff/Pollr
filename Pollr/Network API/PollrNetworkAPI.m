@@ -22,11 +22,12 @@
 
 NSString * const BASE_URL = @"http://162.243.55.142:3000";
 
+#pragma mark - User API Methods
+
 /**
  * @brief Returns the user that is currently signed in
  */
 
-// TODO: Handle login when no user is in Core Data
 - (User *)getUserWithContext:(NSManagedObjectContext *)context{
     NSError *error;
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"User"];
@@ -194,7 +195,30 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
     }] resume];
 }
 
-- (void)getMessagesForUser:(User *)user WithCompletionHandler:(void (^)(NSArray *messages)) completion{
+- (void)findUsersWithUsername:(NSString *) username WithCompletionHandler:(void (^)(NSArray *users)) completion{
+    if(!_config){
+        _config = [NSURLSessionConfiguration defaultSessionConfiguration];
+        _manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:_config];
+    }
+    NSString *url = [NSString stringWithFormat:@"%@/allUsers/%@", BASE_URL, username];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
+    
+    [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        NSArray *userArray;
+        if(error){
+            NSLog(@"LOOKUP ERROR: %@", [error localizedDescription]);
+        } else {
+            // need to scan for length
+            NSArray *responseArray = (NSArray *)responseObject;
+            userArray = responseArray;
+        }
+        completion(userArray);
+    }] resume];
+}
+
+#pragma mark - Message API Methods
+
+- (void)getPublicMessagesForUser:(User *)user WithCompletionHandler:(void (^)(NSArray *messages)) completion{
     if(!_config){
         _config = [NSURLSessionConfiguration defaultSessionConfiguration];
         _manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:_config];
@@ -215,25 +239,24 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
     }] resume];
 }
 
-- (void)getMessagesForUser2:(User *)user WithCompletionHandler:(void (^)(NSArray *messages)) completion{
+- (void)getPrivateMessagesForUser:(User *)user WithCompletionHandler:(void (^)(NSArray *messages)) completion{
     if(!_config){
         _config = [NSURLSessionConfiguration defaultSessionConfiguration];
         _manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:_config];
     }
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc]
-                                    initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/users/%@", BASE_URL, user.username]]];
+                                    initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/getPrivateMessagesFor%@", BASE_URL, user.username]]];
     
     
     [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        NSArray *messageArray;
         if(error){
             NSLog(@"LOOKUP ERROR: %@", [error localizedDescription]);
         } else {
-            NSDictionary *dict = (NSDictionary *)responseObject;
-            NSArray *messagesRaw = (NSArray *)[[(NSArray *)dict firstObject] objectForKey:@"messages"];
-
-            completion(messagesRaw);
+            messageArray = (NSArray *)responseObject;
         }
+        completion(messageArray);
     }] resume];
 }
 
@@ -284,26 +307,7 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
     }] resume];
 }
 
-- (void)findUsersWithUsername:(NSString *) username WithCompletionHandler:(void (^)(NSArray *users)) completion{
-    if(!_config){
-        _config = [NSURLSessionConfiguration defaultSessionConfiguration];
-        _manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:_config];
-    }
-    NSString *url = [NSString stringWithFormat:@"%@/allUsers/%@", BASE_URL, username];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
-    
-    [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-        NSArray *userArray;
-        if(error){
-            NSLog(@"LOOKUP ERROR: %@", [error localizedDescription]);
-        } else {
-            // need to scan for length
-            NSArray *responseArray = (NSArray *)responseObject;
-            userArray = responseArray;
-        }
-        completion(userArray);
-    }] resume];
-}
+#pragma mark - Friend API Methods
 
 - (void)addFriend:(Friend *)friend forUser:(User *) user WithCompletionHandler:(void (^)(BOOL successful)) completion
 {
