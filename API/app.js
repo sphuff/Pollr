@@ -107,6 +107,23 @@ app.delete('/removeFriendFor:user', function(req, res){
     });
 });
 
+app.delete('/removeFriendsFor:user', function(req, res){
+    MongoClient.connect('mongodb://127.0.0.1:27017/Pollr', function(err, db){
+      console.dir("Connected");
+      if(err) {
+        throw err;
+      }
+      var collection = db.collection('users');
+      collection.update(
+        { "username" : req.params.user},
+        { $set: {"friends": []}} , function (err, results){
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(results));
+        db.close();
+      });
+    });
+});
+
 app.get('/friendsFor:username', function(req, res){
   MongoClient.connect('mongodb://127.0.0.1:27017/Pollr', function(err, db) {
   if (err) {
