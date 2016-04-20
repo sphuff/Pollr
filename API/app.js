@@ -141,16 +141,14 @@ app.get('/friendsFor:username', function(req, res){
   });
 });
 
-app.post('/sendMessageTo:user', function(req, res){
+app.post('/sendPrivateMessage', function(req, res){
     MongoClient.connect('mongodb://127.0.0.1:27017/Pollr', function(err, db){
       console.dir("Connected");
       if(err) {
         throw err;
       }
-      var collection = db.collection('users');
-      collection.update(
-        { "username" : req.params.user},
-        { $push: {messages: req.body}} , function (err, results){
+      var collection = db.collection('privateMessages');
+      collection.insert({"createdBy" : req.body.createdBy, "dateCreated" : req.body.dateCreated, "text" : req.body.text, "sentTo" : req.body.sentTo}, function (err, results){
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(results));
         db.close();
@@ -164,11 +162,8 @@ app.post('/sendPublicMessage', function(req, res){
       if(err) {
         throw err;
       }
-      var collection = db.collection('users');
-      collection.update(
-        {},
-        { $push: {messages: req.body}},
-        { upsert: true, multi: true }, function (err, results){
+      var collection = db.collection('publicMessages');
+      collection.insert({"createdBy" : req.body.createdBy, "dateCreated" : req.body.dateCreated, "text" : req.body.text}, function (err, results){
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(results));
         db.close();
