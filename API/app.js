@@ -160,7 +160,8 @@ app.post('/sendPrivateMessage', function(req, res){
           );
           if(i == sendTo.length - 1){
               res.setHeader('Content-Type', 'application/json');
-              res.send(JSON.stringify(messageID));
+              var ret = [messageID];
+              res.send(JSON.stringify(ret));
               db.close();
           }
       }
