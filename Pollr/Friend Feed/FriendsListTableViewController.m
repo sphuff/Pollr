@@ -11,7 +11,9 @@
 
 @interface FriendsListTableViewController ()
 
-@property (nonatomic, strong) NSMutableArray *friendArray;
+@property (nonatomic, strong) NSArray *friendArray;
+@property (nonatomic, strong) NSMutableArray *selectedFriends;
+@property (nonatomic, strong) PollrNetworkAPI *api;
 
 @end
 
@@ -26,15 +28,22 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    PollrNetworkAPI *api = [[PollrNetworkAPI alloc] init];
-    User *currentUser = [api getUserWithContext:self.context];
+    _api = [[PollrNetworkAPI alloc] init];
+    User *currentUser = [_api getUserWithContext:self.context];
     
-    [api getFriendsforUser:currentUser WithCompletionHandler:^(NSArray *friendsArray) {
+    [_api getFriendsforUser:currentUser WithCompletionHandler:^(NSArray *friendsArray) {
         if(friendsArray){
             _friendArray = friendsArray;
             [self.tableView reloadData];
         }
     }];
+    
+    _selectedFriends = [[NSMutableArray alloc] init];
+    
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStylePlain target:self action:@selector(sendButtonPressed)];
+    rightButton.enabled = NO;
+    
+    self.navigationItem.rightBarButtonItem = rightButton;
 
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"friendCell"];
@@ -45,15 +54,20 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)sendButtonPressed
+{
+    NSLog(@"Pressed send button");
+    User *currentUser = [_api getUserWithContext:self.context];
+    [_api sendMessage:self.post ToUsers:_selectedFriends fromUser:currentUser];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Incomplete implementation, return the number of sections
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of rows
     return [_friendArray count];
 }
 
@@ -64,6 +78,16 @@
     [cell.textLabel setText:[NSString stringWithFormat:@"%@",[_friendArray objectAtIndex:indexPath.item]]];
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView
+didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(!self.navigationItem.rightBarButtonItem.isEnabled){
+        [self.navigationItem.rightBarButtonItem setEnabled:YES];
+    }
+    NSLog(@"Selected cell at %lu", [indexPath item]);
+    [_selectedFriends addObject:[_friendArray objectAtIndex:[indexPath item]]];
 }
 
 

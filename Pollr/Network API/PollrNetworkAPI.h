@@ -35,7 +35,7 @@
 - (void)getPublicMessagesForUser:(User *)user WithCompletionHandler:(void (^)(NSArray *messages)) completion;
 - (void)getPrivateMessagesForUser:(User *)user WithCompletionHandler:(void (^)(NSArray *messages)) completion;
 
-- (void)sendMessage:(NSDictionary *)message ToUser:(User *)user;
+- (void)sendMessage:(NSString *)message ToUsers:(NSArray *)users fromUser:(User *)fromUser;
 
 - (void)sendPublicMessage:(NSString *)message fromUser:(User *)user;
 

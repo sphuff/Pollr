@@ -260,26 +260,35 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
     }] resume];
 }
 
-
-
-
-// TODO : Work out private message structure
-- (void)sendMessage:(NSDictionary *)message ToUsers:(NSArray *)users fromUser:(User *)fromUser{
+/**
+ *  Sends a private message to a list of users.
+ *
+ *  @param message  A string message
+ *  @param users    An array of recipients
+ *  @param fromUser The user who is sending the message
+ */
+- (void)sendMessage:(NSString *)message ToUsers:(NSArray *)users fromUser:(User *)fromUser{
     if(!_config){
         _config = [NSURLSessionConfiguration defaultSessionConfiguration];
         _manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:_config];
     }
     
-    NSDictionary *paramDict = @{@"createdBy": fromUser.username, @"dateCreated" : [NSDate date], @"text" : message, @"sentTo" : users};
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"HH:mm.ss MM-dd-yyyy"];
+    NSString *stringDate = [dateFormatter stringFromDate:[NSDate date]];
+    
+    NSDictionary *paramDict = @{@"createdBy": fromUser.username, @"dateCreated" : stringDate, @"text" : message, @"sentTo" : users};
     NSString *url = [NSString stringWithFormat:@"%@/sendPrivateMessage", BASE_URL];
     
-    NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:message error:nil];
+    NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:paramDict error:nil];
     
     [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         if(error){
             NSLog(@"SEND ERROR: %@", [error localizedDescription]);
         } else {
-            NSDictionary *dict = (NSDictionary *)responseObject;
+            NSArray *responseArray = (NSArray *)responseObject;
+            NSString *messageID = responseArray[0];
+            NSLog(@"Message ID: %@", messageID);
         }
     }] resume];
 }
@@ -292,7 +301,6 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"HH:mm.ss MM-dd-yyyy"];
     NSString *stringDate = [dateFormatter stringFromDate:[NSDate date]];
-    NSLog(@"%@", stringDate);
     
     NSDictionary *paramDict = @{@"createdBy": user.username, @"dateCreated" : stringDate, @"text" : message};
     NSString *url = [NSString stringWithFormat:@"%@/sendPublicMessage", BASE_URL];

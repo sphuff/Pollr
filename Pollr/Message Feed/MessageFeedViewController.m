@@ -75,16 +75,6 @@
     
 }
 
-- (void) viewWillAppear:(BOOL)animated{
-    // TODO: Fix repeating UIImage
-    User *user = [_api getUserWithContext:self.context];
-    
-    [_api getPublicMessagesForUser:user WithCompletionHandler:^(NSArray *messages) {
-        _messageArray = [NSArray arrayWithArray:messages];
-        [self.collectionView reloadData];
-    }];
-}
-
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
     return 1;
 }
@@ -186,7 +176,7 @@
 # pragma mark - CHTCollectionViewWaterfallLayoutDelegate
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    NSString *title = [[_messageArray objectAtIndex:[indexPath item]] objectForKey:@"title"];
+    NSString *title = [[_messageArray objectAtIndex:[indexPath item]] objectForKey:@"text"];
     // find number of lines in the cell
     int lineCount = 1;
     int charCount = 0;
