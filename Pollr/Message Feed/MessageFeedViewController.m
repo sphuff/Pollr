@@ -61,10 +61,7 @@
     [postButtonView addSubview:postButton];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:postButtonView];
     
-    
-    User *user = [_api getUserWithContext:self.context];
-    
-    [_api getPublicMessagesForUser:user WithCompletionHandler:^(NSArray *messages) {
+    [_api getPublicMessagesWithCompletionHandler:^(NSArray *messages) {
         _messageArray = [NSArray arrayWithArray:messages];
         [self.collectionView reloadData];
     }];
