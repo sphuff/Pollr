@@ -33,6 +33,29 @@ app.get('/users/:username', function(req, res){
   });
 });
 
+app.post('/userExists', function(req, res){
+  MongoClient.connect('mongodb://127.0.0.1:27017/Pollr', function(err, db) {
+  if (err) {
+    throw err;
+  } 
+  var collection = db.collection('users');
+  // Locate all the entries using find
+    collection.find({"username": req.body.username}).toArray(function(err, results) {
+      res.setHeader('Content-Type', 'application/json');
+      var user = results[0];
+      if(results.length < 1){
+          res.sendStatus(404); // Not Found
+      } else if(user.password != req.body.password){
+          res.sendStatus(401); // Unauthorized
+      } else {
+          res.sendStatus(200);
+      }
+      // Let's close the db
+      db.close();
+    });
+  });
+});
+
 app.get('/allUsers/:username', function(req, res){
   MongoClient.connect('mongodb://127.0.0.1:27017/Pollr', function(err, db) {
   if (err) {

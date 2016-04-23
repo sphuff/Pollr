@@ -117,9 +117,9 @@
     [self.view addSubview:spinner];
     
     
-    [api userExists:user WithCompletionHandler:^(BOOL isAUser, BOOL correctPass, NSDictionary *dict) {
+    [api userExists:user WithCompletionHandler:^(NSInteger statusCode) {
         [spinner stopAnimating];
-        if(isAUser && correctPass){
+        if(statusCode == 200){
             UIImageView *successView = [[UIImageView alloc] initWithFrame:spinner.frame];
             successView.image = [UIImage imageNamed:@"check30px"];
             successView.contentMode = UIViewContentModeCenter;
@@ -129,8 +129,6 @@
                 successView.alpha = 1.0;
             } completion:^(BOOL finished) {
                 if(finished){
-                    NSString *email = [dict objectForKey:@"email"];
-                    user.email = email;
                     User *currentUser = [api saveUser:user WithContext:self.context];
                     NSLog(@"Saved user");
                     
@@ -154,7 +152,7 @@
             }];
             
         }
-        else if(isAUser){
+        else if(statusCode == 401){
             UIImageView *failureView = [[UIImageView alloc] initWithFrame:spinner.frame];
             failureView.image = [UIImage imageNamed:@"failure30px"];
             failureView.contentMode = UIViewContentModeCenter;
@@ -170,7 +168,7 @@
                     [failureView removeFromSuperview];
                 }
             }];
-        } else {
+        } else if(statusCode == 404){
             UIImageView *failureView = [[UIImageView alloc] initWithFrame:spinner.frame];
             failureView.image = [UIImage imageNamed:@"failure30px"];
             failureView.contentMode = UIViewContentModeCenter;
@@ -181,6 +179,22 @@
             } completion:^(BOOL finished) {
                 if(finished){
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Uh Oh" message:@"Invalid username" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    [alert show];
+                    [_loginButton setAttributedTitle:_loginText forState:UIControlStateNormal];
+                    [failureView removeFromSuperview];
+                }
+            }];
+        } else {
+            UIImageView *failureView = [[UIImageView alloc] initWithFrame:spinner.frame];
+            failureView.image = [UIImage imageNamed:@"failure30px"];
+            failureView.contentMode = UIViewContentModeCenter;
+            failureView.alpha = 0.0;
+            [self.view addSubview:failureView];
+            [UIView animateWithDuration:2.0 animations:^{
+                failureView.alpha = 1.0;
+            } completion:^(BOOL finished) {
+                if(finished){
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Uh Oh" message:@"Server Error: Sorry, we are working on it." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                     [alert show];
                     [_loginButton setAttributedTitle:_loginText forState:UIControlStateNormal];
                     [failureView removeFromSuperview];

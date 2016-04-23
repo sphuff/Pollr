@@ -67,33 +67,22 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
     return user;
 }
 
-- (void)userExists:(PollrUser *)user WithCompletionHandler:(void (^)(BOOL isAUser, BOOL correctPass, NSDictionary *dict))completion{
+- (void)userExists:(PollrUser *)user WithCompletionHandler:(void (^)(NSInteger statusCode))completion{
 
-    NSString *url = [NSString stringWithFormat:@"%@/users/%@", BASE_URL, user.username];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
+    NSString *url = [NSString stringWithFormat:@"%@/userExists", BASE_URL];
+    NSDictionary *userDict = @{@"username" : user.username, @"email" : user.email, @"password" : user.password};
+    NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:userDict error:nil];
     
     [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-        BOOL userFound = NO;
-        BOOL correctPass = YES;
-        NSDictionary *userDict;
+        NSInteger statusCode = 500;
         if(error){
-            NSLog(@"LOOKUP ERROR: %@", [error localizedDescription]);
-            userFound = NO;
+            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+            statusCode = [httpResponse statusCode];
         } else {
-            // need to scan for length
-            NSArray *responseArray = (NSArray *)responseObject;
-            NSDictionary *dict = [responseArray firstObject];
-            if([dict count] > 0){
-                userFound = YES;
-                userDict = dict;
-                NSString *pass = [dict objectForKey:@"password"];
-                NSLog(@"Pass: %@", pass);
-                if (![pass isEqual:user.password]) {
-                    correctPass = NO;
-                }
-            }
+            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+            statusCode = [httpResponse statusCode];
         }
-        completion(userFound, correctPass, userDict);
+        completion(statusCode);
     }] resume];
 }
 

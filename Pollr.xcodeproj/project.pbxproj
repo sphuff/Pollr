@@ -41,7 +41,6 @@
 		DC78F56E1CC0242300759990 /* Friend.m in Sources */ = {isa = PBXBuildFile; fileRef = DC78F56C1CC0242300759990 /* Friend.m */; };
 		DC8DE4DE1C75397F00813662 /* User+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8DE4DD1C75397F00813662 /* User+CoreDataProperties.m */; };
 		DC8DE4E71C753AC700813662 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = DC8DE4E61C753AC700813662 /* User.m */; };
-		DC96110A1C7AD4F000DB112D /* LoginPopover.m in Sources */ = {isa = PBXBuildFile; fileRef = DC9611091C7AD4F000DB112D /* LoginPopover.m */; };
 		DC96110D1C7ADCE000DB112D /* PollrUser.m in Sources */ = {isa = PBXBuildFile; fileRef = DC96110C1C7ADCE000DB112D /* PollrUser.m */; };
 		DC981D891CBDE9DA0043AC16 /* AddFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC981D881CBDE9DA0043AC16 /* AddFriendViewController.m */; };
 		DC9FE5D11C7D4B7A00321EA6 /* password3.svg in Resources */ = {isa = PBXBuildFile; fileRef = DC9FE5D01C7D4B7A00321EA6 /* password3.svg */; };
@@ -141,8 +140,6 @@
 		DC8DE4DD1C75397F00813662 /* User+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "User+CoreDataProperties.m"; sourceTree = "<group>"; };
 		DC8DE4E51C753AC700813662 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		DC8DE4E61C753AC700813662 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
-		DC9611081C7AD4F000DB112D /* LoginPopover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginPopover.h; sourceTree = "<group>"; };
-		DC9611091C7AD4F000DB112D /* LoginPopover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginPopover.m; sourceTree = "<group>"; };
 		DC96110B1C7ADCE000DB112D /* PollrUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PollrUser.h; sourceTree = "<group>"; };
 		DC96110C1C7ADCE000DB112D /* PollrUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PollrUser.m; sourceTree = "<group>"; };
 		DC981D871CBDE9DA0043AC16 /* AddFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFriendViewController.h; sourceTree = "<group>"; };
@@ -248,8 +245,6 @@
 			children = (
 				DCBAF1541C21E9D700F05D5D /* AppDelegate.h */,
 				DCBAF1551C21E9D700F05D5D /* AppDelegate.m */,
-				DC9611081C7AD4F000DB112D /* LoginPopover.h */,
-				DC9611091C7AD4F000DB112D /* LoginPopover.m */,
 				DCC08A5E1CA5D2BB002CB49C /* LoginViewController.h */,
 				DCC08A5F1CA5D2BB002CB49C /* LoginViewController.m */,
 				DCB968F11C23547D00909058 /* SignupViewController.h */,
@@ -630,7 +625,6 @@
 				DC78F56D1CC0242300759990 /* Friend+CoreDataProperties.m in Sources */,
 				DC3B80411CB6B5B40065BB3E /* FriendMessageCell.m in Sources */,
 				DC8DE4DE1C75397F00813662 /* User+CoreDataProperties.m in Sources */,
-				DC96110A1C7AD4F000DB112D /* LoginPopover.m in Sources */,
 				DC4412601C73FC030059E5EA /* Message.m in Sources */,
 				DCBAF1AC1C21ED8400F05D5D /* QuestionViewController.m in Sources */,
 				DCB968F31C23547D00909058 /* SignupViewController.m in Sources */,

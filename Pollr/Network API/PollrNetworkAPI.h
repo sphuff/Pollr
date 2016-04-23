@@ -46,12 +46,12 @@
  *  account, and the user is saved into Core Data.
  *
  *  @param user       The user that is signing in
- *  @param completion A completion handler that returns several boolean values and a dictionary value for whether
- *                    the user exists. The first boolean describes whether the user object was found in the database.
- *                    The second describes whether the password inputted was correct, and the dictionary is the user
- *                    document from the database.
+ *  @param completion A completion handler that returns the status code for the network call. If 200
+ *                    is returned, the correct password and username were inputted. If 404 comes back,
+ *                    an invalid username was specified. Lastly, 401 comes back if the password is 
+ *                    incorrect.
  */
-- (void)userExists:(PollrUser *)user WithCompletionHandler:(void (^)(BOOL isAUser, BOOL correctPass, NSDictionary *dict))completion;
+- (void)userExists:(PollrUser *)user WithCompletionHandler:(void (^)(NSInteger statusCode))completion;
 
 /**
  *  Saves the user to Core Data for quick loading. Currently does not account for errors in Core Data,
