@@ -75,6 +75,7 @@
 		DCBAF1AC1C21ED8400F05D5D /* QuestionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DCBAF1AB1C21ED8400F05D5D /* QuestionViewController.m */; };
 		DCC08A601CA5D2BB002CB49C /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DCC08A5F1CA5D2BB002CB49C /* LoginViewController.m */; };
 		DCCB69081C6D22EA00E41614 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DCCB69071C6D22EA00E41614 /* MessageViewController.m */; };
+		DCE247621CCC02F5003BFF24 /* PollrNetworkAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = DCE247611CCC02F5003BFF24 /* PollrNetworkAPITests.m */; };
 		DCF5EE301C6445BB007839AA /* PollrNetworkAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = DCF5EE2F1C6445BB007839AA /* PollrNetworkAPI.m */; };
 /* End PBXBuildFile section */
 
@@ -188,6 +189,7 @@
 		DCC08A5F1CA5D2BB002CB49C /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		DCCB69061C6D22EA00E41614 /* MessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageViewController.h; sourceTree = "<group>"; };
 		DCCB69071C6D22EA00E41614 /* MessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageViewController.m; sourceTree = "<group>"; };
+		DCE247611CCC02F5003BFF24 /* PollrNetworkAPITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PollrNetworkAPITests.m; sourceTree = "<group>"; };
 		DCF5EE2E1C6445BB007839AA /* PollrNetworkAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PollrNetworkAPI.h; sourceTree = "<group>"; };
 		DCF5EE2F1C6445BB007839AA /* PollrNetworkAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PollrNetworkAPI.m; sourceTree = "<group>"; };
 		EA44114F668FB335584E9704 /* Pods_Pollr.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pollr.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -355,6 +357,7 @@
 			children = (
 				DCBAF16A1C21E9D700F05D5D /* Supporting Files */,
 				DCBAF16C1C21E9D700F05D5D /* PollrTests.m */,
+				DCE247611CCC02F5003BFF24 /* PollrNetworkAPITests.m */,
 			);
 			path = PollrTests;
 			sourceTree = "<group>";
@@ -642,6 +645,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DCBAF16D1C21E9D700F05D5D /* PollrTests.m in Sources */,
+				DCE247621CCC02F5003BFF24 /* PollrNetworkAPITests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

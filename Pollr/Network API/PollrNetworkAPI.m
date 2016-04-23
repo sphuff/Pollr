@@ -24,11 +24,18 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
 
 #pragma mark - User API Methods
 
-/**
- * @brief Returns the user that is currently signed in
- */
+- (instancetype)init{
+    
+    self = [super init];
+    if(!_config){
+        _config = [NSURLSessionConfiguration defaultSessionConfiguration];
+        _manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:_config];
+    }
+    return self;
+}
 
 - (User *)getUserWithContext:(NSManagedObjectContext *)context{
+    
     NSError *error;
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"User"];
     NSArray *results = [context executeFetchRequest:request error:&error];
@@ -39,6 +46,7 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
 }
 
 - (void)deleteUsersWithContext:(NSManagedObjectContext *)context{
+    
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"User"];
     NSBatchDeleteRequest *delete = [[NSBatchDeleteRequest alloc] initWithFetchRequest:request];
     
@@ -47,11 +55,20 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
     [[context persistentStoreCoordinator] executeRequest:delete withContext:context error:&deleteError];
 }
 
+- (User *)getTestUserWithContext: (NSManagedObjectContext *)context;{
+    
+    User *user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:context];
+    user.username = @"Test1";
+    user.password = @"pass123";
+    user.email = @"testemail@test.com";
+    
+    NSError *error;
+    [context save:&error];
+    return user;
+}
+
 - (void)userExists:(PollrUser *)user WithCompletionHandler:(void (^)(BOOL isAUser, BOOL correctPass, NSDictionary *dict))completion{
-    if(!_config){
-        _config = [NSURLSessionConfiguration defaultSessionConfiguration];
-        _manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:_config];
-    }
+
     NSString *url = [NSString stringWithFormat:@"%@/users/%@", BASE_URL, user.username];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     
@@ -80,18 +97,8 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
     }] resume];
 }
 
-- (User *)getTestUserWithContext: (NSManagedObjectContext *)context;{
-    User *user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:context];
-    user.username = @"Test1";
-    user.password = @"pass123";
-    user.email = @"testemail@test.com";
-    
-    NSError *error;
-    [context save:&error];
-    return user;
-}
-
 - (User *)saveUser:(PollrUser *)user WithContext:(NSManagedObjectContext *)context{
+    
     User *currentUser = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:context];
     currentUser.username = user.username;
     currentUser.password = user.password;
@@ -101,16 +108,7 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
     return currentUser;
 }
 
-
-/**
- * @brief Checks to see if the username has been taken, and if not, inputs the user data in the 
- * remote server and saves using Core Data
- */
 - (void)signupWithUser:(User *)user WithContext: (NSManagedObjectContext *)context AndWithCompletionHandler:(void (^)(BOOL signedUp, BOOL usernameTaken, BOOL serverProblem)) completion {
-    if(!_config){
-        _config = [NSURLSessionConfiguration defaultSessionConfiguration];
-        _manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:_config];
-    }
     
     [self isValidUsername:user.username WithCompletionHandler:^(BOOL validUsername, BOOL serverProblem) {
         if(validUsername){
@@ -137,19 +135,15 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
     }];
 }
 
-/**
- * @brief For now, just checks to make sure that the password has at least 8 characters
- */
 - (BOOL)isValidPassword:(NSString *) password{
+    
     if([password length] < 8)
         return NO;
     return YES;
 }
 
-/**
- * @brief Checks to make sure that the email has a valid .edu or .com domain
- */
 - (BOOL)isValidEmail:(NSString *) email{
+    
     NSString *domainName = [email substringFromIndex:([email length] - 4)];
     NSRange searchRange = NSMakeRange(0, [domainName length]);
     NSError *error;
@@ -164,15 +158,7 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
     return NO;
 }
 
-/**
- * @brief Checks to see if the username has been taken
- */
 - (void)isValidUsername:(NSString *) username WithCompletionHandler:(void (^)(BOOL validUsername, BOOL serverProblem)) completion{
-    
-    if(!_config){
-        _config = [NSURLSessionConfiguration defaultSessionConfiguration];
-        _manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:_config];
-    }
     
     NSString *url = [NSString stringWithFormat:@"%@/users/%@", BASE_URL, username];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
@@ -196,10 +182,7 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
 }
 
 - (void)findUsersWithUsername:(NSString *) username WithCompletionHandler:(void (^)(NSArray *users)) completion{
-    if(!_config){
-        _config = [NSURLSessionConfiguration defaultSessionConfiguration];
-        _manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:_config];
-    }
+    
     NSString *url = [NSString stringWithFormat:@"%@/allUsers/%@", BASE_URL, username];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     
@@ -218,11 +201,7 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
 
 #pragma mark - Message API Methods
 
-- (void)getPublicMessagesForUser:(User *)user WithCompletionHandler:(void (^)(NSArray *messages)) completion{
-    if(!_config){
-        _config = [NSURLSessionConfiguration defaultSessionConfiguration];
-        _manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:_config];
-    }
+- (void)getPublicMessagesWithCompletionHandler:(void (^)(NSArray *messages)) completion{
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc]
                                     initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/getPublicMessages", BASE_URL]]];
@@ -240,10 +219,6 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
 }
 
 - (void)getPrivateMessagesForUser:(User *)user WithCompletionHandler:(void (^)(NSArray *messages)) completion{
-    if(!_config){
-        _config = [NSURLSessionConfiguration defaultSessionConfiguration];
-        _manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:_config];
-    }
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc]
                                     initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/getPrivateMessagesFor%@", BASE_URL, user.username]]];
@@ -260,19 +235,8 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
     }] resume];
 }
 
-/**
- *  Sends a private message to a list of users.
- *
- *  @param message  A string message
- *  @param users    An array of recipients
- *  @param fromUser The user who is sending the message
- */
-- (void)sendMessage:(NSString *)message ToUsers:(NSArray *)users fromUser:(User *)fromUser{
-    if(!_config){
-        _config = [NSURLSessionConfiguration defaultSessionConfiguration];
-        _manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:_config];
-    }
-    
+- (void)sendMessage:(NSString *)message ToUsers:(NSArray *)users fromUser:(User *)fromUser {
+
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"HH:mm.ss MM-dd-yyyy"];
     NSString *stringDate = [dateFormatter stringFromDate:[NSDate date]];
@@ -292,6 +256,7 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
         }
     }] resume];
 }
+
 - (void)sendPublicMessage:(NSString *)message fromUser:(User *)user{
     if(!_config){
         _config = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -319,10 +284,6 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
 
 - (void)addFriend:(Friend *)friend forUser:(User *) user WithCompletionHandler:(void (^)(BOOL successful)) completion
 {
-    if(!_config){
-        _config = [NSURLSessionConfiguration defaultSessionConfiguration];
-        _manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:_config];
-    }
     
     NSString *url = [NSString stringWithFormat:@"%@/addFriendFor%@", BASE_URL, user.username];
     NSArray *friendArray = [[NSArray alloc] initWithObjects:friend.username, nil];// must be an NSArray or NSDictionary
