@@ -33,18 +33,6 @@
     [super tearDown];
 }
 
-- (void)testExample {
-    // This is an example of a functional test case.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
-}
-
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
-}
-
 - (void) testUserExists {
     PollrUser *user200 = [[PollrUser alloc] init];
     user200.username = @"Test1";
@@ -61,45 +49,58 @@
     user401.email = @"email";
     user401.password = @"wrongPass";
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"Status Code 200"];
+    typedef void (^ExistsBlock)(PollrUser *, XCTestExpectation *);
     
-    [_api userExists:user200 WithCompletionHandler:^(NSInteger statusCode) {
+    ExistsBlock status200 = ^(PollrUser *user, XCTestExpectation *expectationArg){[_api userExists:user WithCompletionHandler:^(NSInteger statusCode) {
         XCTAssertTrue(statusCode == 200);
-        [expectation fulfill];
-    }];
+        [expectationArg fulfill];
+    }];};
     
-    [self waitForExpectationsWithTimeout:5.0 handler:^(NSError * _Nullable error) {
-        if(error){
-            NSLog(@"Timeout error : %@", [error description]);
-        }
-    }];
-    
-    expectation = [self expectationWithDescription:@"Status Code 404"];
-    
-    [_api userExists:user404 WithCompletionHandler:^(NSInteger statusCode) {
-        NSLog(@"statusCode: %ld", (long)statusCode);
+    ExistsBlock status404 = ^(PollrUser *user, XCTestExpectation *expectationArg){[_api userExists:user WithCompletionHandler:^(NSInteger statusCode) {
         XCTAssertTrue(statusCode == 404);
-        [expectation fulfill];
-    }];
+        [expectationArg fulfill];
+    }];};
     
-    [self waitForExpectationsWithTimeout:5.0 handler:^(NSError * _Nullable error) {
-        if(error){
-            NSLog(@"Timeout error : %@", [error description]);
-        }
-    }];
-    
-    expectation = [self expectationWithDescription:@"Status Code 401"];
-    [_api userExists:user401 WithCompletionHandler:^(NSInteger statusCode) {
-        NSLog(@"statusCode: %ld", (long)statusCode);
+    ExistsBlock status401 = ^(PollrUser *user, XCTestExpectation *expectationArg){[_api userExists:user WithCompletionHandler:^(NSInteger statusCode) {
         XCTAssertTrue(statusCode == 401);
-        [expectation fulfill];
-    }];
+        [expectationArg fulfill];
+    }];};
     
-    [self waitForExpectationsWithTimeout:5.0 handler:^(NSError * _Nullable error) {
-        if(error){
-            NSLog(@"Timeout error : %@", [error description]);
+    
+    [self doNetworkOperationWithUsersandMethods:user200, status200, user404, status404, user401, status401, nil];
+}
+
+- (void) doNetworkOperationWithUsersandMethods:(id)firstArg, ...NS_REQUIRES_NIL_TERMINATION;
+{
+    va_list args;
+    va_start(args, firstArg);
+    
+    NSMutableArray *userArray = [[NSMutableArray alloc] init];
+    NSMutableArray *functionArray = [[NSMutableArray alloc] init];
+    
+    int index = 0; // keep track of position in list
+    id arg = firstArg;
+    while(arg != nil)
+    {
+        if(index%2 == 0){
+            [userArray addObject:arg]; // even indeces are users
+        } else {
+            [functionArray addObject:arg]; // odd indeces are functions
         }
-    }];
+        arg = va_arg(args, id);
+        index++;
+    }
+    
+    for(int i = 0; i < [userArray count]; i++){
+        XCTestExpectation *expectation = [self expectationWithDescription:@"Status Code"];
+        void (^function)(PollrUser *, XCTestExpectation *) = [functionArray objectAtIndex:i];
+        function([userArray objectAtIndex:i], expectation);
+        [self waitForExpectationsWithTimeout:5.0 handler:^(NSError * _Nullable error) {
+            if(error){
+                NSLog(@"Timeout error : %@", [error description]);
+            }
+        }];
+    }
 }
 
 @end

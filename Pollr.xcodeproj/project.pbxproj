@@ -55,7 +55,6 @@
 		DCBAF1591C21E9D700F05D5D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DCBAF1581C21E9D700F05D5D /* ViewController.m */; };
 		DCBAF15E1C21E9D700F05D5D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DCBAF15D1C21E9D700F05D5D /* Images.xcassets */; };
 		DCBAF1611C21E9D700F05D5D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = DCBAF15F1C21E9D700F05D5D /* LaunchScreen.xib */; };
-		DCBAF16D1C21E9D700F05D5D /* PollrTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DCBAF16C1C21E9D700F05D5D /* PollrTests.m */; };
 		DCBAF19B1C21EBE400F05D5D /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCBAF17C1C21EA0D00F05D5D /* Accounts.framework */; };
 		DCBAF19C1C21EBE400F05D5D /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCBAF1781C21E9FA00F05D5D /* AdSupport.framework */; };
 		DCBAF19D1C21EBE400F05D5D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCBAF17A1C21EA0700F05D5D /* AudioToolbox.framework */; };
@@ -163,7 +162,6 @@
 		DCBAF1601C21E9D700F05D5D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		DCBAF1661C21E9D700F05D5D /* PollrTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PollrTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCBAF16B1C21E9D700F05D5D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DCBAF16C1C21E9D700F05D5D /* PollrTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PollrTests.m; sourceTree = "<group>"; };
 		DCBAF1781C21E9FA00F05D5D /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		DCBAF17A1C21EA0700F05D5D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		DCBAF17C1C21EA0D00F05D5D /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
@@ -351,7 +349,6 @@
 			isa = PBXGroup;
 			children = (
 				DCBAF16A1C21E9D700F05D5D /* Supporting Files */,
-				DCBAF16C1C21E9D700F05D5D /* PollrTests.m */,
 				DCE247611CCC02F5003BFF24 /* PollrNetworkAPITests.m */,
 			);
 			path = PollrTests;
@@ -638,7 +635,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DCBAF16D1C21E9D700F05D5D /* PollrTests.m in Sources */,
 				DCE247621CCC02F5003BFF24 /* PollrNetworkAPITests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
