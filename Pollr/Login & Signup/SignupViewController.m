@@ -101,9 +101,7 @@
         return;
     }
     
-    User *currentUser = [NSEntityDescription
-                         insertNewObjectForEntityForName:@"User"
-                         inManagedObjectContext:_managedObjectContext];
+    PollrUser *currentUser = [[PollrUser alloc] init];
     
     currentUser.username = [_usernameField text];
     currentUser.password = [_passwordField text];

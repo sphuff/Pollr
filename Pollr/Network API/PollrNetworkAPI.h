@@ -82,7 +82,7 @@
  *                    taken. The last boolean says whether the reason for signup failure was because the
  *                    server could not be contacted.
  */
-- (void)signupWithUser:(User *)user WithContext: (NSManagedObjectContext *)context AndWithCompletionHandler:(void (^)(BOOL signedUp, BOOL usernameTaken, BOOL serverProblem)) completion;
+- (void)signupWithUser:(PollrUser *)user WithContext: (NSManagedObjectContext *)context AndWithCompletionHandler:(void (^)(BOOL signedUp, BOOL usernameTaken, BOOL serverProblem)) completion;
 
 /**
  *  Currently just checks to make sure that the provided password is at least 8 characters. Later implementations

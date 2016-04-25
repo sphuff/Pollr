@@ -97,29 +97,39 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
     return currentUser;
 }
 
-- (void)signupWithUser:(User *)user WithContext: (NSManagedObjectContext *)context AndWithCompletionHandler:(void (^)(BOOL signedUp, BOOL usernameTaken, BOOL serverProblem)) completion {
+- (void)signupWithUser:(PollrUser *)user WithContext: (NSManagedObjectContext *)context AndWithCompletionHandler:(void (^)(BOOL signedUp, BOOL usernameTaken, BOOL serverProblem)) completion {
     
-    [self isValidUsername:user.username WithCompletionHandler:^(BOOL validUsername, BOOL serverProblem) {
-        if(validUsername){
+    [self userExists:user WithCompletionHandler:^(NSInteger statusCode) {
+        __block BOOL signedUp = NO;
+        if(statusCode == 404){
             NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:user.username, @"username", user.password, @"password", user.email, @"email", nil];
             NSString *url = [NSString stringWithFormat:@"%@/addUser/", BASE_URL];
             
             NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:params error:nil];
             
             [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-                BOOL signedUp = NO;
                 if(error){
                     NSLog(@"SIGNUP ERROR: %@", [error localizedDescription]);
                 } else {
                     signedUp = YES;
+                    User *currentUser = [NSEntityDescription
+                                         insertNewObjectForEntityForName:@"User"
+                                         inManagedObjectContext:context];
+                    currentUser.username = user.username;
+                    currentUser.email = user.email;
+                    currentUser.password = user.password;
+                    
                     NSError *error2;
                     [context save:&error2];
                 }
-                completion(signedUp, !validUsername, serverProblem); // not 2nd argument based on phrasing of declaration
+                completion(signedUp, NO, NO);
             }] resume];
+        } else if(statusCode == 500){
+            signedUp = NO;
+            completion(signedUp, NO, YES);
         } else {
-            BOOL signedUp = NO;
-            completion(signedUp, !validUsername, serverProblem); // not 2nd argument based on phrasing of declaration
+            signedUp = NO;
+            completion(signedUp, YES, NO);
         }
     }];
 }
@@ -147,28 +157,7 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
     return NO;
 }
 
-- (void)isValidUsername:(NSString *) username WithCompletionHandler:(void (^)(BOOL validUsername, BOOL serverProblem)) completion{
-    
-    NSString *url = [NSString stringWithFormat:@"%@/users/%@", BASE_URL, username];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
-    
-    [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-        BOOL isValidUsername = NO;
-        BOOL serverProblem = NO;
-        if(error){
-            NSLog(@"LOOKUP ERROR: %@", [error localizedDescription]);
-            serverProblem = YES;
-            isValidUsername = YES;
-        } else {
-            // need to scan for length
-            NSDictionary *dict = (NSDictionary *)responseObject;
-            if([dict count] == 0){
-                isValidUsername = YES;
-            }
-        }
-        completion(isValidUsername, serverProblem);
-    }] resume];
-}
+
 
 - (void)findUsersWithUsername:(NSString *) username WithCompletionHandler:(void (^)(NSArray *users)) completion{
     
