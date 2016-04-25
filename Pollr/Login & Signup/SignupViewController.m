@@ -13,6 +13,9 @@
 #import "User.h"
 #import <CommonCrypto/CommonCryptor.h>
 #import <CommonCrypto/CommonKeyDerivation.h>
+#import "MessageFeedViewController.h"
+#import "FriendFeedViewController.h"
+
 
 @interface SignupViewController ()
 
@@ -104,12 +107,16 @@
     PollrUser *currentUser = [[PollrUser alloc] init];
     
     currentUser.username = [_usernameField text];
-    currentUser.password = [_passwordField text];
+    NSString *hashedPassword = [_api encryptPassword:[_passwordField text]];
+    NSLog(@"hash: %@", hashedPassword);
+    currentUser.password = hashedPassword;
     currentUser.email = [_emailField text];
     
     [_api signupWithUser:currentUser WithContext: _managedObjectContext AndWithCompletionHandler:^(BOOL signedUp, BOOL usernameTaken, BOOL serverProblem) {
         if(signedUp){
             NSLog(@"Signed Up!");
+            [self transitionVC];
+            
         } else {
             if(usernameTaken){
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Uh Oh" message:@"This username is already in use. Please enter another one." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
@@ -127,6 +134,59 @@
             }
         }
     }];
+}
+
+- (void)transitionVC
+{
+    MessageFeedViewController *messageVC = [[MessageFeedViewController alloc] init];
+    messageVC.context = self.managedObjectContext;
+    
+    FriendFeedViewController *friendVC = [[FriendFeedViewController alloc] init];
+    friendVC.context = self.managedObjectContext;
+    
+    UINavigationController *publicNC = [[UINavigationController alloc] initWithRootViewController:messageVC];
+    publicNC.tabBarItem.title = @"Public";
+    publicNC.tabBarItem.image = [UIImage imageNamed:@"public_unselected"];
+    
+    UINavigationController *friendNC = [[UINavigationController alloc] initWithRootViewController:friendVC];
+    friendNC.tabBarItem.title = @"Friend";
+    friendNC.tabBarItem.image = [UIImage imageNamed:@"friends_unselected"];
+    
+    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+    
+    tabBarController.viewControllers = [NSArray arrayWithObjects:publicNC, friendNC, nil];
+    
+    // change navbar title color
+    [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                          [UIColor hx_colorWithHexRGBAString:@"6482AD"], NSForegroundColorAttributeName,
+                                                          nil]];
+    [self.navigationItem setTitle:[_api getUserWithContext:self.managedObjectContext].username];
+    [self.navigationController pushViewController:tabBarController animated:YES];
+    [self.navigationController setNavigationBarHidden:YES];
+    
+//    CGFloat frameHeight = self.navigationController.navigationBar.frame.size.height + self.navigationController.navigationBar.frame.origin.y;
+//    
+//    [UIView animateWithDuration:0.33 animations:^{
+//        _popupView.frame = CGRectMake(0, frameHeight, self.view.frame.size.width, self.view.frame.size.height);
+//        [_popupView setBackgroundColor:[UIColor hx_colorWithHexRGBAString:@"E4DCDC"]];
+//        [_loginButton setAlpha:0.0];
+//        [_signupButton setAlpha:0.0];
+//        [_loginTextView setAlpha:0.0];
+//        
+//    } completion:^(BOOL finished) {
+//        if(finished){
+//            // add username to navbar title
+//            [self.navigationItem setTitle:user.username];
+//            [self.navigationController pushViewController:tabBarController animated:NO];
+//            [self.navigationController setNavigationBarHidden:YES];
+//            
+//            _popupView.frame = CGRectMake(0, (3*self.view.frame.size.height)/4, self.view.frame.size.width, (3*self.view.frame.size.height)/4);
+//            [_popupView setBackgroundColor:[UIColor whiteColor]];
+//            [_loginButton setAlpha:1.0];
+//            [_signupButton setAlpha:1.0];
+//            [_loginTextView setAlpha:1.0];
+//        }
+//    }];
 }
 
 - (BOOL)checkBasicFields{
