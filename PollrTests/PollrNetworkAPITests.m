@@ -13,6 +13,7 @@
 @interface PollrNetworkAPITests : XCTestCase
 
 @property (nonatomic, strong) PollrNetworkAPI *api;
+@property (nonatomic, strong) NSManagedObjectContext *context;
 
 @end
 
@@ -23,7 +24,7 @@
     // Put setup code here. This method is called before the invocation of each test method in the class.
     
     AppDelegate *appDel = [[UIApplication sharedApplication] delegate];
-    NSManagedObjectContext *context = [appDel managedObjectContext];
+    _context = [appDel managedObjectContext];
     
     _api = [[PollrNetworkAPI alloc] init];
 }
@@ -67,15 +68,73 @@
     }];};
     
     
-    [self doNetworkOperationWithUsersandMethods:user200, status200, user404, status404, user401, status401, nil];
+    [self doNetworkOperationWithArgsandMethods:user200, status200, user404, status404, user401, status401, nil];
 }
 
-- (void) doNetworkOperationWithUsersandMethods:(id)firstArg, ...NS_REQUIRES_NIL_TERMINATION;
+- (void)testIsValidEmail
+{
+    NSString *emailCorrect = @"test@richmond.edu";
+    NSString *emailWrongDomain = @"test@richmond.ru";
+    
+    XCTAssertTrue([_api isValidEmail:emailCorrect]);
+    XCTAssertFalse([_api isValidEmail:emailWrongDomain]);
+}
+
+- (void)testIsValidPassword
+{
+    NSString *passwordCorrect = @"testpass101";
+    NSString *passwordWrongLength = @"test";
+    
+    XCTAssertTrue([_api isValidPassword:passwordCorrect]);
+    XCTAssertFalse([_api isValidPassword:passwordWrongLength]);
+}
+
+- (void)testSignup
+{
+    PollrUser *validUser = [[PollrUser alloc] init];
+    validUser.username = [NSString stringWithFormat:@"Test%d", arc4random_uniform(30000)];
+    NSLog(@"username: %@", validUser.username);
+    validUser.email = @"test@testemail.com";
+    validUser.password = @"testpass1";
+    
+    PollrUser *invalidUser = [[PollrUser alloc] init];
+    invalidUser.username = @"Testuser1";
+    invalidUser.email = @"test@testemail.com";
+    invalidUser.password = @"testpass1";
+    
+    typedef void (^SignupTest)(PollrUser *, XCTestExpectation *);
+
+    
+    SignupTest pass = ^(PollrUser *user, XCTestExpectation *expectation){[_api signupWithUser:user WithContext:self.context AndWithCompletionHandler:^(BOOL signedUp, BOOL usernameTaken, BOOL serverProblem) {
+        XCTAssertTrue(signedUp && !usernameTaken && !serverProblem);
+        [expectation fulfill];
+    }];};
+    
+    SignupTest usernameInUse = ^(PollrUser *user, XCTestExpectation *expectation){[_api signupWithUser:user WithContext:self.context AndWithCompletionHandler:^(BOOL signedUp, BOOL usernameTaken, BOOL serverProblem) {
+        XCTAssertTrue(!signedUp && usernameTaken && !serverProblem);
+        [expectation fulfill];
+    }];};
+    
+    [self doNetworkOperationWithArgsandMethods:validUser, pass, invalidUser, usernameInUse, nil];
+}
+
+/**
+ *  Performs a network operation given a list of arguments and methods. There can only be one argument per method (unless
+ *  the method block is passed multiple arguments), and they must be passed in as arguments and methods in an alternating
+ *  fashion. Also, the list must be nil-terminated. This method makes it unnecessary to initialize multiple 
+ *  XCTestExpectations for multiple network calls.
+ *
+ *  Example:
+ *  [self doNetworkOperationWithArgsandMethods:arg1, method1, arg2, method2, nil];
+ *
+ *  @param firstArg The first argument in the list of arguments and methods
+ */
+- (void) doNetworkOperationWithArgsandMethods:(id)firstArg, ...NS_REQUIRES_NIL_TERMINATION;
 {
     va_list args;
     va_start(args, firstArg);
     
-    NSMutableArray *userArray = [[NSMutableArray alloc] init];
+    NSMutableArray *argArray = [[NSMutableArray alloc] init];
     NSMutableArray *functionArray = [[NSMutableArray alloc] init];
     
     int index = 0; // keep track of position in list
@@ -83,7 +142,7 @@
     while(arg != nil)
     {
         if(index%2 == 0){
-            [userArray addObject:arg]; // even indeces are users
+            [argArray addObject:arg]; // even indeces are users
         } else {
             [functionArray addObject:arg]; // odd indeces are functions
         }
@@ -91,10 +150,10 @@
         index++;
     }
     
-    for(int i = 0; i < [userArray count]; i++){
+    for(int i = 0; i < [argArray count]; i++){
         XCTestExpectation *expectation = [self expectationWithDescription:@"Status Code"];
-        void (^function)(PollrUser *, XCTestExpectation *) = [functionArray objectAtIndex:i];
-        function([userArray objectAtIndex:i], expectation);
+        void (^function)(id, XCTestExpectation *) = [functionArray objectAtIndex:i];
+        function([argArray objectAtIndex:i], expectation);
         [self waitForExpectationsWithTimeout:5.0 handler:^(NSError * _Nullable error) {
             if(error){
                 NSLog(@"Timeout error : %@", [error description]);
