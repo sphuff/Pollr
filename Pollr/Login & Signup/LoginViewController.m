@@ -13,6 +13,7 @@
 #import "PollrUser.h"
 #import "QuestionViewController.h"
 #import "FriendFeedViewController.h"
+#import "HexColors.h"
 
 @interface LoginViewController()
 
@@ -92,16 +93,15 @@
     [self.view addSubview:forgotPasswordButton];
 }
 
-// TODO: Make check mark appear
-
 - (void) loginPressed{
     NSLog(@"Login pressed");
 
     [_loginButton setAttributedTitle:nil forState:UIControlStateNormal];
     PollrNetworkAPI *api = [[PollrNetworkAPI alloc] init];
     PollrUser *user = [[PollrUser alloc] init];
+    NSString *hashedPass = [_api encryptPassword:[_passwordField text]];
     user.username = [_usernameField text];
-    user.password = [_passwordField text];
+    user.password = hashedPass;
     
     int spinnerWidth = _loginButton.frame.size.height - 10;
     int spinnerHeight = spinnerWidth;
@@ -116,7 +116,6 @@
     
     [self.view addSubview:spinner];
     
-    
     [api userExists:user WithCompletionHandler:^(NSInteger statusCode) {
         [spinner stopAnimating];
         if(statusCode == 200){
@@ -130,7 +129,6 @@
             } completion:^(BOOL finished) {
                 if(finished){
                     User *currentUser = [api saveUser:user WithContext:self.context];
-                    NSLog(@"Saved user");
                     
                     MessageFeedViewController *messageVC = [[MessageFeedViewController alloc] init];
                     messageVC.context = self.context;
@@ -139,13 +137,19 @@
                     
                     UINavigationController *publicNC = [[UINavigationController alloc] initWithRootViewController:messageVC];
                     publicNC.tabBarItem.title = @"Public";
+                    publicNC.tabBarItem.image = [UIImage imageNamed:@"public_unselected"];
                     
                     UINavigationController *friendNC = [[UINavigationController alloc] initWithRootViewController:friendVC];
                     friendNC.tabBarItem.title = @"Friend";
+                    friendNC.tabBarItem.image = [UIImage imageNamed:@"friends_unselected"];
                     
                     UITabBarController *tabBarController = [[UITabBarController alloc] init];
                     
                     tabBarController.viewControllers = [NSArray arrayWithObjects:publicNC, friendNC, nil];
+                    [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                          [UIColor hx_colorWithHexRGBAString:@"6482AD"], NSForegroundColorAttributeName,
+                                                                          nil]];
+                    [self.navigationItem setTitle:currentUser.username];
                     [self.navigationController pushViewController:tabBarController animated:NO];
                     [self.navigationController setNavigationBarHidden:YES];
                 }

@@ -112,7 +112,10 @@
     [self.navigationController pushViewController:questionVC animated:NO];
 }
 
+// TODO: Make bar disappear
 - (void)logout{
+    [self.navigationController setNavigationBarHidden:YES];
+    
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"User"];
     [_api deleteUsersWithContext:self.context];
     ViewController *VC = [[ViewController alloc] init];

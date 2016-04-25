@@ -108,7 +108,6 @@
     
     currentUser.username = [_usernameField text];
     NSString *hashedPassword = [_api encryptPassword:[_passwordField text]];
-    NSLog(@"hash: %@", hashedPassword);
     currentUser.password = hashedPassword;
     currentUser.email = [_emailField text];
     
@@ -163,30 +162,6 @@
     [self.navigationItem setTitle:[_api getUserWithContext:self.managedObjectContext].username];
     [self.navigationController pushViewController:tabBarController animated:YES];
     [self.navigationController setNavigationBarHidden:YES];
-    
-//    CGFloat frameHeight = self.navigationController.navigationBar.frame.size.height + self.navigationController.navigationBar.frame.origin.y;
-//    
-//    [UIView animateWithDuration:0.33 animations:^{
-//        _popupView.frame = CGRectMake(0, frameHeight, self.view.frame.size.width, self.view.frame.size.height);
-//        [_popupView setBackgroundColor:[UIColor hx_colorWithHexRGBAString:@"E4DCDC"]];
-//        [_loginButton setAlpha:0.0];
-//        [_signupButton setAlpha:0.0];
-//        [_loginTextView setAlpha:0.0];
-//        
-//    } completion:^(BOOL finished) {
-//        if(finished){
-//            // add username to navbar title
-//            [self.navigationItem setTitle:user.username];
-//            [self.navigationController pushViewController:tabBarController animated:NO];
-//            [self.navigationController setNavigationBarHidden:YES];
-//            
-//            _popupView.frame = CGRectMake(0, (3*self.view.frame.size.height)/4, self.view.frame.size.width, (3*self.view.frame.size.height)/4);
-//            [_popupView setBackgroundColor:[UIColor whiteColor]];
-//            [_loginButton setAlpha:1.0];
-//            [_signupButton setAlpha:1.0];
-//            [_loginTextView setAlpha:1.0];
-//        }
-//    }];
 }
 
 - (BOOL)checkBasicFields{
