@@ -8,6 +8,8 @@
 
 #import "PollrNetworkAPI.h"
 #import <AFNetworking/AFNetworking.h>
+#include <CommonCrypto/CommonDigest.h>
+
 
 
 @interface PollrNetworkAPI()
@@ -21,6 +23,18 @@
 
 
 NSString * const BASE_URL = @"http://162.243.55.142:3000";
+
+#pragma mark - Security methods
+- (NSString *)encryptPassword: (NSString *)password
+{
+    const char *s = [password cStringUsingEncoding:NSASCIIStringEncoding];
+    NSData *keyData = [NSData dataWithBytes:s length:strlen(s)];
+    uint8_t digest[CC_SHA512_DIGEST_LENGTH] = {0};
+    
+    CC_SHA512(keyData.bytes, keyData.length, digest);
+    NSData *hashedPass = [NSData dataWithBytes:digest length:CC_SHA512_DIGEST_LENGTH];
+    return [hashedPass description];
+}
 
 #pragma mark - User API Methods
 

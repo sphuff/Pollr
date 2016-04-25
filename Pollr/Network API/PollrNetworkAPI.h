@@ -14,6 +14,16 @@
 
 @interface PollrNetworkAPI : NSObject
 
+#pragma mark - Security methods
+/**
+ *  Encrypts password using SHA512 encoding
+ *
+ *  @param password The plaintext user password
+ *
+ *  @return The hexadecimal representation of the user's password after it is encrypted with SHA512
+ */
+- (NSString *)encryptPassword: (NSString *)password;
+
 #pragma mark - User API Methods
 /**
  *  Returns the user that is currently signed in through Core Data
