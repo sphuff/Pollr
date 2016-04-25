@@ -126,6 +126,10 @@
 
         tabBarController.viewControllers = [NSArray arrayWithObjects:publicNC, friendNC, nil];
         
+        // change navbar title color
+        [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                              [UIColor hx_colorWithHexRGBAString:@"6482AD"], NSForegroundColorAttributeName,
+                                                              nil]];
         
         CGFloat frameHeight = self.navigationController.navigationBar.frame.size.height + self.navigationController.navigationBar.frame.origin.y;
         
@@ -138,6 +142,8 @@
             
         } completion:^(BOOL finished) {
             if(finished){
+                // add username to navbar title
+                [self.navigationItem setTitle:user.username];
                 [self.navigationController pushViewController:tabBarController animated:NO];
                 [self.navigationController setNavigationBarHidden:YES];
                 

@@ -70,6 +70,13 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logout)];
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor hx_colorWithHexRGBAString:@"6482AD"];
     
+    User *currentUser = [_api getUserWithContext:self.context];
+    
+    [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                          [UIColor hx_colorWithHexRGBAString:@"6482AD"], NSForegroundColorAttributeName,
+                                                          nil]];
+    [self.navigationItem setTitle:currentUser.username];
+    
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
