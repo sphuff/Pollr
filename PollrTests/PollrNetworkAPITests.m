@@ -118,6 +118,33 @@
     [self doNetworkOperationWithArgsandMethods:validUser, pass, invalidUser, usernameInUse, nil];
 }
 
+- (void)testFindUsers
+{
+    PollrUser *validUser = [[PollrUser alloc] init];
+    validUser.username = @"Test123456";
+    validUser.email = @"test@testemail.com";
+    validUser.password = @"testpass1";
+    
+    PollrUser *invalidUser = [[PollrUser alloc] init];
+    invalidUser.username = [NSString stringWithFormat:@"Test%d", arc4random_uniform(30000)];
+    invalidUser.email = @"test@testemail.com";
+    invalidUser.password = @"testpass1";
+    
+    typedef void (^FindUsers)(PollrUser *, XCTestExpectation *);
+    
+    FindUsers existingUser = ^(PollrUser *user, XCTestExpectation *expectation){[_api findUsersWithUsername:user.username WithCompletionHandler:^(NSArray *users) {
+        XCTAssertTrue([users count] == 1);
+        [expectation fulfill];
+    }];};
+    
+    FindUsers nonexistantUser = ^(PollrUser *user, XCTestExpectation *expectation){[_api findUsersWithUsername:user.username WithCompletionHandler:^(NSArray *users) {
+        XCTAssertTrue([users count] == 0);
+        [expectation fulfill];
+    }];};
+    
+    [self doNetworkOperationWithArgsandMethods:validUser, existingUser, invalidUser, nonexistantUser, nil];
+}
+
 /**
  *  Performs a network operation given a list of arguments and methods. There can only be one argument per method (unless
  *  the method block is passed multiple arguments), and they must be passed in as arguments and methods in an alternating
