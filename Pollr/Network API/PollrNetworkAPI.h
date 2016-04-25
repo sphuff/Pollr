@@ -106,20 +106,6 @@
 - (BOOL)isValidEmail:(NSString *) email;
 
 /**
- *  Checks whether or not the provided username is already in use. This method is used during registration to make sure that
- *  no two users have the same username. As of now, the method works by querying the database for the username,
- *  and by calculating the length of the resulting dictionary. If the dictionary has multiple entries (or just one), the username
- *  is taken and the client notifies the user. A better implementation would not return a user dictionary for security
- *  reasons, but rather would just notify the client that the username is taken.
- *
- *  @param username   The username to be checked against
- *  @param completion A completion handler that responds back to the client with two boolean values. The first boolean
- *                    tells whether the username has already been taken, while the other says if the server could be
- *                    successfully contacted.
- */
-- (void)isValidUsername:(NSString *) username WithCompletionHandler:(void (^)(BOOL validUsername, BOOL serverProblem)) completion;
-
-/**
  *  Provides an array of users with the specified username. This method is used during registration to make sure that
  *  no two users have the same username. As of now, the method works by querying the database for the username,
  *  and by calculating the length of the resulting array. If the array has multiple entries (or just one), the username
