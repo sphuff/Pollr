@@ -105,13 +105,13 @@
     typedef void (^SignupTest)(PollrUser *, XCTestExpectation *);
 
     
-    SignupTest pass = ^(PollrUser *user, XCTestExpectation *expectation){[_api signupWithUser:user WithContext:self.context AndWithCompletionHandler:^(BOOL signedUp, BOOL usernameTaken, BOOL serverProblem) {
-        XCTAssertTrue(signedUp && !usernameTaken && !serverProblem);
+    SignupTest pass = ^(PollrUser *user, XCTestExpectation *expectation){[_api signupWithUser:user WithContext:self.context AndWithCompletionHandler:^(NSInteger statusCode) {
+        XCTAssertTrue(statusCode == 404);
         [expectation fulfill];
     }];};
     
-    SignupTest usernameInUse = ^(PollrUser *user, XCTestExpectation *expectation){[_api signupWithUser:user WithContext:self.context AndWithCompletionHandler:^(BOOL signedUp, BOOL usernameTaken, BOOL serverProblem) {
-        XCTAssertTrue(!signedUp && usernameTaken && !serverProblem);
+    SignupTest usernameInUse = ^(PollrUser *user, XCTestExpectation *expectation){[_api signupWithUser:user WithContext:self.context AndWithCompletionHandler:^(NSInteger statusCode) {
+        XCTAssertTrue(statusCode == 200);
         [expectation fulfill];
     }];};
     

@@ -111,18 +111,27 @@
     currentUser.password = hashedPassword;
     currentUser.email = [_emailField text];
     
-    [_api signupWithUser:currentUser WithContext: _managedObjectContext AndWithCompletionHandler:^(BOOL signedUp, BOOL usernameTaken, BOOL serverProblem) {
-        if(signedUp){
+    [_api signupWithUser:currentUser WithContext: _managedObjectContext AndWithCompletionHandler:^(NSInteger statusCode) {
+        if(statusCode == 404){
             NSLog(@"Signed Up!");
+            User *user = [NSEntityDescription
+                                 insertNewObjectForEntityForName:@"User"
+                                 inManagedObjectContext:self.managedObjectContext];
+            user.username = currentUser.username;
+            user.email = currentUser.email;
+            user.password = currentUser.password;
+            
+            NSError *error2;
+            [self.managedObjectContext save:&error2];
             [self transitionVC];
             
         } else {
-            if(usernameTaken){
+            if(statusCode == 200){
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Uh Oh" message:@"This username is already in use. Please enter another one." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
                 [alert show];
                 return;
             }
-            else if (serverProblem) {
+            else if (statusCode == 500) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Uh Oh" message:@"Sorry, something went wrong with our servers! Please try again later." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
                 [alert show];
                 return;

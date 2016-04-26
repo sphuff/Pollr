@@ -22,7 +22,7 @@
 @implementation PollrNetworkAPI
 
 
-NSString * const BASE_URL = @"http://162.243.55.142:3000";
+NSString * const BASE_URL = @"https://pollr.info";
 
 #pragma mark - Security methods
 - (NSString *)encryptPassword: (NSString *)password
@@ -111,7 +111,7 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
     return currentUser;
 }
 
-- (void)signupWithUser:(PollrUser *)user WithContext: (NSManagedObjectContext *)context AndWithCompletionHandler:(void (^)(BOOL signedUp, BOOL usernameTaken, BOOL serverProblem)) completion {
+- (void)signupWithUser:(PollrUser *)user WithContext: (NSManagedObjectContext *)context AndWithCompletionHandler:(void (^)(NSInteger statusCode)) completion {
     
     [self userExists:user WithCompletionHandler:^(NSInteger statusCode) {
         __block BOOL signedUp = NO;
@@ -124,26 +124,13 @@ NSString * const BASE_URL = @"http://162.243.55.142:3000";
             [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
                 if(error){
                     NSLog(@"SIGNUP ERROR: %@", [error localizedDescription]);
+                    completion(500); // internal server error during signup
                 } else {
-                    signedUp = YES;
-                    User *currentUser = [NSEntityDescription
-                                         insertNewObjectForEntityForName:@"User"
-                                         inManagedObjectContext:context];
-                    currentUser.username = user.username;
-                    currentUser.email = user.email;
-                    currentUser.password = user.password;
-                    
-                    NSError *error2;
-                    [context save:&error2];
+                    completion(statusCode);
                 }
-                completion(signedUp, NO, NO);
             }] resume];
-        } else if(statusCode == 500){
-            signedUp = NO;
-            completion(signedUp, NO, YES);
         } else {
-            signedUp = NO;
-            completion(signedUp, YES, NO);
+            completion(statusCode);
         }
     }];
 }
