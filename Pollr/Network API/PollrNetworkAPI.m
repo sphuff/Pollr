@@ -33,7 +33,10 @@ NSString * const BASE_URL = @"https://pollr.info";
     
     CC_SHA512(keyData.bytes, keyData.length, digest);
     NSData *hashedPass = [NSData dataWithBytes:digest length:CC_SHA512_DIGEST_LENGTH];
-    return [hashedPass description];
+    NSCharacterSet *charsToRemove = [NSCharacterSet characterSetWithCharactersInString:@"< >"];
+    NSString *hashedString = [[hashedPass description] stringByTrimmingCharactersInSet:charsToRemove];;
+    hashedString = [hashedString stringByReplacingOccurrencesOfString:@" " withString:@""];
+    return hashedString;
 }
 
 #pragma mark - User API Methods
