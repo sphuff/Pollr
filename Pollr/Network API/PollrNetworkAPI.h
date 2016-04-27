@@ -52,18 +52,6 @@
 - (User *)getTestUserWithContext: (NSManagedObjectContext *)context;
 
 /**
- *  Tells whether the specified user is already signed up. If so, the user is logging back into his or her
- *  account, and the user is saved into Core Data.
- *
- *  @param user       The user that is signing in
- *  @param completion A completion handler that returns the status code for the network call. If 200
- *                    is returned, the correct password and username were inputted. If 404 comes back,
- *                    an invalid username was specified. Lastly, 401 comes back if the password is 
- *                    incorrect.
- */
-- (void)userExists:(PollrUser *)user WithCompletionHandler:(void (^)(NSInteger statusCode))completion;
-
-/**
  *  Saves the user to Core Data for quick loading. Currently does not account for errors in Core Data,
  *  because Core Data errors are unforgivable.
  *
@@ -78,7 +66,7 @@
  *  Checks to see if the username has been taken, and if not, inputs the user data in the
  *  Pollr database and saves to the client with Core Data. Inputting the user into the
  *  Pollr database involves a POST request to the server, which in turn creates a user
- *  document in the MongoDB database. Several boolean values are given back, which describe
+ *  document in the MongoDB database. A single status code is given back, which describes
  *  whether the user could be signed up, and if not, why that might be the case. As of now,
  *  unsuccessful registrations are attributed to either the username being taken, or not
  *  being able to connect with the server. Future implementations could provide further reasons
@@ -86,13 +74,18 @@
  *
  *  @param user       The current user to be signed up
  *  @param context    The current NSManagedObjectContext
- *  @param completion A completion handler that returns several boolean values describing the sign up status.
- *                    The first boolean describes whether the user could be signed up. Upon an unsuccessful
- *                    signup, the second boolean describes whether it failed because the username was already
- *                    taken. The last boolean says whether the reason for signup failure was because the
- *                    server could not be contacted.
+ *  @param completion A completion handler that returns the HTTP status code for user signup
  */
 - (void)signupWithUser:(PollrUser *)user WithContext: (NSManagedObjectContext *)context AndWithCompletionHandler:(void (^)(NSInteger statusCode)) completion;
+
+/**
+ *  A more client-friendly version of the userExists method. Just authenticates the user, and passes the status
+ *  code back to the client. 
+ *
+ *  @param user       The current user
+ *  @param completion A completion handler that returns the HTTP status code for JWT authentication
+ */
+- (void)loginWithUser: (PollrUser *)user WithCompletionHandler:(void (^)(NSInteger statusCode)) completion;
 
 /**
  *  Currently just checks to make sure that the provided password is at least 8 characters. Later implementations

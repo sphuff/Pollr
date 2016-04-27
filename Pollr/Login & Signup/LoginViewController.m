@@ -116,7 +116,7 @@
     
     [self.view addSubview:spinner];
     
-    [api userExists:user WithCompletionHandler:^(NSInteger statusCode) {
+    [api loginWithUser: user WithCompletionHandler:^(NSInteger statusCode) {
         [spinner stopAnimating];
         if(statusCode == 200){
             UIImageView *successView = [[UIImageView alloc] initWithFrame:spinner.frame];

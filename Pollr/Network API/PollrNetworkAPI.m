@@ -8,7 +8,8 @@
 
 #import "PollrNetworkAPI.h"
 #import <AFNetworking/AFNetworking.h>
-#include <CommonCrypto/CommonDigest.h>
+#import <CommonCrypto/CommonDigest.h>
+#import <SimpleKeychain/SimpleKeychain.h>
 
 
 
@@ -22,7 +23,7 @@
 @implementation PollrNetworkAPI
 
 
-NSString * const BASE_URL = @"https://pollr.info";
+NSString * const BASE_URL = @"https://pollr.info/api";
 
 #pragma mark - Security methods
 - (NSString *)encryptPassword: (NSString *)password
@@ -37,6 +38,43 @@ NSString * const BASE_URL = @"https://pollr.info";
     NSString *hashedString = [[hashedPass description] stringByTrimmingCharactersInSet:charsToRemove];;
     hashedString = [hashedString stringByReplacingOccurrencesOfString:@" " withString:@""];
     return hashedString;
+}
+/**
+ *  Authenticates the user using Auth0's JWT framework. If the user provides a valid username and password,
+ *  he or she is allocated a JWT, which is stored in the SimpleKeychain for later use. Each network call
+ *  wil rely upon JWT authentication, so I made a conscious decision to encapsulate it from the client side
+ *  for added security. If the user wants to authenticate, he or she will do so through the signup or login
+ *  methods rather than directly through this method.
+ *
+ *  @param user       The current user
+ *  @param completion A completion handler that returns a status code
+ */
+- (void)authenticateUser: (PollrUser *)user WithCompletionHandler: (void (^)(NSInteger statusCode))completion
+{
+    NSString *url = [NSString stringWithFormat:@"%@/authenticate", BASE_URL];
+    NSDictionary *paramDict = @{@"username" : user.username, @"password" : user.password};
+    NSError *error;
+    NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:paramDict error:nil];
+    
+    [_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        NSHTTPURLResponse *urlResponse = (NSHTTPURLResponse *)response;
+        NSDictionary *responseDict = (NSDictionary *)responseObject;
+        NSInteger statusCode = [urlResponse statusCode];
+        if(statusCode == 404 || statusCode == 401){
+            NSLog(@"Error: %@", [responseDict objectForKey:@"message"]);
+        } else {
+            NSLog(@"Successful authentication");
+            NSString *jwt = [responseDict objectForKey:@"token"];
+            [[A0SimpleKeychain keychain] setString:jwt forKey:@"auth0-user-jwt"];
+        }
+    }];
+}
+/*
+*   A simple helper method to set the JWT for each network request
+*/
+- (void)setTokenForHeader: (NSMutableURLRequest *)request
+{
+    [request setValue:[[A0SimpleKeychain keychain] stringForKey:@"auth0-user-jwt"] forHTTPHeaderField:@"token"];
 }
 
 #pragma mark - User API Methods
@@ -84,25 +122,6 @@ NSString * const BASE_URL = @"https://pollr.info";
     return user;
 }
 
-- (void)userExists:(PollrUser *)user WithCompletionHandler:(void (^)(NSInteger statusCode))completion{
-
-    NSString *url = [NSString stringWithFormat:@"%@/userExists", BASE_URL];
-    NSDictionary *userDict = @{@"username" : user.username, @"password" : user.password};
-    NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:userDict error:nil];
-    
-    [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-        NSInteger statusCode = 500;
-        if(error){
-            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-            statusCode = [httpResponse statusCode];
-        } else {
-            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-            statusCode = [httpResponse statusCode];
-        }
-        completion(statusCode);
-    }] resume];
-}
-
 - (User *)saveUser:(PollrUser *)user WithContext:(NSManagedObjectContext *)context{
     
     User *currentUser = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:context];
@@ -115,26 +134,23 @@ NSString * const BASE_URL = @"https://pollr.info";
 }
 
 - (void)signupWithUser:(PollrUser *)user WithContext: (NSManagedObjectContext *)context AndWithCompletionHandler:(void (^)(NSInteger statusCode)) completion {
-    
-    [self userExists:user WithCompletionHandler:^(NSInteger statusCode) {
-        __block BOOL signedUp = NO;
-        if(statusCode == 404){
-            NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:user.username, @"username", user.password, @"password", user.email, @"email", nil];
-            NSString *url = [NSString stringWithFormat:@"%@/addUser/", BASE_URL];
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:user.username, @"username", user.password, @"password", user.email, @"email", nil];
+    NSString *url = [NSString stringWithFormat:@"%@/addUser/", BASE_URL];
             
-            NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:params error:nil];
+    NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:params error:nil];
+    [self setTokenForHeader:request];
             
-            [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-                if(error){
-                    NSLog(@"SIGNUP ERROR: %@", [error localizedDescription]);
-                    completion(500); // internal server error during signup
-                } else {
-                    completion(statusCode);
-                }
-            }] resume];
-        } else {
-            completion(statusCode);
-        }
+    [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        NSHTTPURLResponse *urlResponse = (NSHTTPURLResponse *)response;
+        NSInteger statusCode = [urlResponse statusCode];
+        completion(statusCode);
+    }] resume];
+}
+
+- (void)loginWithUser: (PollrUser *)user WithCompletionHandler:(void (^)(NSInteger statusCode)) completion
+{
+    [self authenticateUser:user WithCompletionHandler:^(NSInteger statusCode) {
+        completion(statusCode);
     }];
 }
 
@@ -167,6 +183,7 @@ NSString * const BASE_URL = @"https://pollr.info";
     
     NSString *url = [NSString stringWithFormat:@"%@/allUsers/%@", BASE_URL, username];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
+    [self setTokenForHeader:request];
     
     [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         NSArray *userArray;
@@ -187,7 +204,7 @@ NSString * const BASE_URL = @"https://pollr.info";
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc]
                                     initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/getPublicMessages", BASE_URL]]];
-    
+    [self setTokenForHeader:request];
     
     [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         NSArray *messageArray;
@@ -204,7 +221,7 @@ NSString * const BASE_URL = @"https://pollr.info";
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc]
                                     initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/getPrivateMessagesFor%@", BASE_URL, user.username]]];
-    
+    [self setTokenForHeader:request];
     
     [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         NSArray *messageArray;
@@ -227,6 +244,7 @@ NSString * const BASE_URL = @"https://pollr.info";
     NSString *url = [NSString stringWithFormat:@"%@/sendPrivateMessage", BASE_URL];
     
     NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:paramDict error:nil];
+    [self setTokenForHeader:request];
     
     [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         if(error){
@@ -252,6 +270,7 @@ NSString * const BASE_URL = @"https://pollr.info";
     NSDictionary *paramDict = @{@"createdBy": user.username, @"dateCreated" : stringDate, @"text" : message};
     NSString *url = [NSString stringWithFormat:@"%@/sendPublicMessage", BASE_URL];
     NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:paramDict error:nil];
+    [self setTokenForHeader:request];
     
     [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         if(error){
@@ -270,6 +289,7 @@ NSString * const BASE_URL = @"https://pollr.info";
     NSString *url = [NSString stringWithFormat:@"%@/addFriendFor%@", BASE_URL, user.username];
     NSArray *friendArray = [[NSArray alloc] initWithObjects:friend.username, nil];// must be an NSArray or NSDictionary
     NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:friendArray error:nil];
+    [self setTokenForHeader:request];
     
     [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         BOOL success = NO;
@@ -293,6 +313,7 @@ NSString * const BASE_URL = @"https://pollr.info";
     NSString *url = [NSString stringWithFormat:@"%@/removeFriendFor%@", BASE_URL, user.username];
     NSArray *friendArray = [[NSArray alloc] initWithObjects:friend.username, nil];// must be an NSArray or NSDictionary
     NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"DELETE" URLString:url parameters:friendArray error:nil];
+    [self setTokenForHeader:request];
     
     [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         BOOL success = NO;
@@ -316,7 +337,7 @@ NSString * const BASE_URL = @"https://pollr.info";
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc]
                                     initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/friendsFor%@", BASE_URL, user.username]]];
-    
+    [self setTokenForHeader:request];
     
     [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         NSArray *friendsArray;

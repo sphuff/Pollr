@@ -1,24 +1,72 @@
 var express        =        require("express");
+var mongoose       =        require('mongoose');
 var bodyParser     =        require("body-parser");
 var app            =        express();
+var router         =        express.Router();
 var ObjectID = require('mongodb').ObjectID;
+var config         =        require('./config');
+var jwt            =        require('jsonwebtoken');
 //Here we are configuring express to use body-parser as middle-ware.
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.set('jwtKey', config.key);
 
 var MongoClient = require('mongodb').MongoClient
 	, format = require('util').format;
+
+
+app.use('/api', router);
 
 app.listen(3000, function () {
   console.log('App listening on port 3000!');
 });
 
-app.get('/', function (req, res) {
+router.get('/', function (req, res) {
   res.send('Hello World!');
 });
 
-app.get('/users/:username', function(req, res){
-  MongoClient.connect('mongodb://127.0.0.1:27017/Pollr', function(err, db) {
+router.post('/authenticate', function (req, res){
+    MongoClient.connect(config.database, function(err, db) {
+    if (err) {
+      throw err;
+    } 
+    res.setHeader('Content-Type', 'application/json');
+    var collection = db.collection('users');
+    collection.find({"username": req.body.username}).toArray(function(err, results){
+        var user = results[0];
+        if(results.length < 1){
+            res.status(404).json({"success" : "false", "message" : "User not found"}); // Not Found
+        } else if(user.password != req.body.password){
+            res.status(401).json({"success" : "false", "message" : "Improper credentials"}); // Unauthorized
+        } else {
+            var token = jwt.sign(user, app.get('jwtKey'), {
+                expiresIn: "1d" // expires in 24 hours
+            });
+            res.json({"success" : "true", "token" : token});
+        }
+        db.close();
+    });
+  });
+});
+
+router.use(function(req, res, next){
+    var token = req.body.token || req.headers['token'];
+    if(token){
+      jwt.verify(token, app.get('jwtKey'), function(err, decoded){
+          if(err){
+              return res.json({"success" : "false", "message" : "Failed to authenticate token"});
+          } else {
+              next();
+          }
+      });
+    } else { // no token found
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(403).json({"success" : "false", "message" : "No token provided"});
+    }
+});
+
+router.get('/users/:username', function(req, res){
+  MongoClient.connect(config.database, function(err, db) {
   if (err) {
     throw err;
   } 
@@ -33,8 +81,8 @@ app.get('/users/:username', function(req, res){
   });
 });
 
-app.post('/userExists', function(req, res){
-  MongoClient.connect('mongodb://127.0.0.1:27017/Pollr', function(err, db) {
+router.post('/userExists', function(req, res){
+  MongoClient.connect(config.database, function(err, db) {
   if (err) {
     throw err;
   } 
@@ -56,8 +104,8 @@ app.post('/userExists', function(req, res){
   });
 });
 
-app.get('/allUsers/:username', function(req, res){
-  MongoClient.connect('mongodb://127.0.0.1:27017/Pollr', function(err, db) {
+router.get('/allUsers/:username', function(req, res){
+  MongoClient.connect(config.database, function(err, db) {
   if (err) {
     throw err;
   } 
@@ -81,8 +129,8 @@ app.get('/allUsers/:username', function(req, res){
   });
 });
 
-app.post('/addUser', function(req, res){
-    MongoClient.connect('mongodb://127.0.0.1:27017/Pollr', function(err, db){
+router.post('/addUser', function(req, res){
+    MongoClient.connect(config.database, function(err, db){
       console.dir("Connected");
       if(err) {
         throw err;
@@ -96,8 +144,8 @@ app.post('/addUser', function(req, res){
     });
 });
 
-app.post('/addFriendFor:user', function(req, res){
-    MongoClient.connect('mongodb://127.0.0.1:27017/Pollr', function(err, db){
+router.post('/addFriendFor:user', function(req, res){
+    MongoClient.connect(config.database, function(err, db){
       console.dir("Connected");
       if(err) {
         throw err;
@@ -114,8 +162,8 @@ app.post('/addFriendFor:user', function(req, res){
 });
 
 
-app.delete('/removeFriendFor:user', function(req, res){
-    MongoClient.connect('mongodb://127.0.0.1:27017/Pollr', function(err, db){
+router.delete('/removeFriendFor:user', function(req, res){
+    MongoClient.connect(config.database, function(err, db){
       console.dir("Connected");
       if(err) {
         throw err;
@@ -131,8 +179,8 @@ app.delete('/removeFriendFor:user', function(req, res){
     });
 });
 
-app.delete('/removeFriendsFor:user', function(req, res){
-    MongoClient.connect('mongodb://127.0.0.1:27017/Pollr', function(err, db){
+router.delete('/removeFriendsFor:user', function(req, res){
+    MongoClient.connect(config.database, function(err, db){
       console.dir("Connected");
       if(err) {
         throw err;
@@ -148,8 +196,8 @@ app.delete('/removeFriendsFor:user', function(req, res){
     });
 });
 
-app.get('/friendsFor:username', function(req, res){
-  MongoClient.connect('mongodb://127.0.0.1:27017/Pollr', function(err, db) {
+router.get('/friendsFor:username', function(req, res){
+  MongoClient.connect(config.database, function(err, db) {
   if (err) {
     throw err;
   } 
@@ -165,8 +213,8 @@ app.get('/friendsFor:username', function(req, res){
   });
 });
 
-app.post('/sendPrivateMessage', function(req, res){
-      MongoClient.connect('mongodb://127.0.0.1:27017/Pollr', function(err, db){
+router.post('/sendPrivateMessage', function(req, res){
+      MongoClient.connect(config.database, function(err, db){
       console.dir("Connected");
       if(err) {
         throw err;
@@ -191,8 +239,8 @@ app.post('/sendPrivateMessage', function(req, res){
   });
 });
 
-app.delete('/removePrivateMessagesFor:user', function(req, res){
-    MongoClient.connect('mongodb://127.0.0.1:27017/Pollr', function(err, db){
+router.delete('/removePrivateMessagesFor:user', function(req, res){
+    MongoClient.connect(config.database, function(err, db){
       console.dir("Connected");
       if(err) {
         throw err;
@@ -208,8 +256,8 @@ app.delete('/removePrivateMessagesFor:user', function(req, res){
     });
 });
 
-app.post('/sendPublicMessage', function(req, res){
-    MongoClient.connect('mongodb://127.0.0.1:27017/Pollr', function(err, db){
+router.post('/sendPublicMessage', function(req, res){
+    MongoClient.connect(config.database, function(err, db){
       console.dir("Connected");
       if(err) {
         throw err;
@@ -223,8 +271,8 @@ app.post('/sendPublicMessage', function(req, res){
     });
 });
 
-app.get('/getPublicMessages', function(req, res){
-    MongoClient.connect('mongodb://127.0.0.1:27017/Pollr', function(err, db){
+router.get('/getPublicMessages', function(req, res){
+    MongoClient.connect(config.database, function(err, db){
       console.dir("Connected");
       if(err) {
         throw err;
@@ -238,8 +286,8 @@ app.get('/getPublicMessages', function(req, res){
     });
 });
 
-app.get('/getPrivateMessagesFor:user', function(req, res){
-    MongoClient.connect('mongodb://127.0.0.1:27017/Pollr', function(err, db){
+router.get('/getPrivateMessagesFor:user', function(req, res){
+    MongoClient.connect(config.database, function(err, db){
       console.dir("Connected");
       if(err) {
         throw err;
