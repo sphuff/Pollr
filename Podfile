@@ -11,4 +11,6 @@ pod 'LGPlusButtonsView', '~> 1.1.0'
 
 pod 'HexColors'
 
+pod 'SimpleKeychain'
+
 end

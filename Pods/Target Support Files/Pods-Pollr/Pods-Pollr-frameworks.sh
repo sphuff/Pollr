@@ -89,6 +89,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-Pollr/ChameleonFramework.framework"
   install_framework "Pods-Pollr/HexColors.framework"
   install_framework "Pods-Pollr/LGPlusButtonsView.framework"
+  install_framework "Pods-Pollr/SimpleKeychain.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-Pollr/AFNetworking.framework"
@@ -96,4 +97,5 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-Pollr/ChameleonFramework.framework"
   install_framework "Pods-Pollr/HexColors.framework"
   install_framework "Pods-Pollr/LGPlusButtonsView.framework"
+  install_framework "Pods-Pollr/SimpleKeychain.framework"
 fi
