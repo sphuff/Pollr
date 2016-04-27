@@ -1,3 +1,11 @@
+/*jslint node: true */
+/*jslint white: true */
+/*jslint plusplus: true */
+/*jshint -W024 */
+/*jshint -W105 */
+/*jshint es5: true */
+
+"use strict";
 var express        =        require("express");
 var mongoose       =        require('mongoose');
 var bodyParser     =        require("body-parser");
@@ -11,8 +19,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.set('jwtKey', config.key);
 
-var MongoClient = require('mongodb').MongoClient
-	, format = require('util').format;
+var MongoClient = require('mongodb').MongoClient,
+	format = require('util').format;
 
 
 app.use('/api', router);
@@ -31,15 +39,16 @@ router.post('/authenticate', function (req, res){
       throw err;
     } 
     res.setHeader('Content-Type', 'application/json');
-    var collection = db.collection('users');
+    var collection = db.collection('users'),
+    token;
     collection.find({"username": req.body.username}).toArray(function(err, results){
         var user = results[0];
         if(results.length < 1){
             res.status(404).json({"success" : "false", "message" : "User not found"}); // Not Found
-        } else if(user.password != req.body.password){
+        } else if(user.password !== req.body.password){
             res.status(401).json({"success" : "false", "message" : "Improper credentials"}); // Unauthorized
         } else {
-            var token = jwt.sign(user, app.get('jwtKey'), {
+            token = jwt.sign(user, app.get('jwtKey'), {
                 expiresIn: "1d" // expires in 24 hours
             });
             res.json({"success" : "true", "token" : token});
@@ -50,7 +59,7 @@ router.post('/authenticate', function (req, res){
 });
 
 router.use(function(req, res, next){
-    var token = req.body.token || req.headers['token'];
+    var token = req.body.token || req.headers.token;
     if(token){
       jwt.verify(token, app.get('jwtKey'), function(err, decoded){
           if(err){
@@ -93,7 +102,7 @@ router.post('/userExists', function(req, res){
       var user = results[0];
       if(results.length < 1){
           res.sendStatus(404); // Not Found
-      } else if(user.password != req.body.password){
+      } else if(user.password !== req.body.password){
           res.sendStatus(401); // Unauthorized
       } else {
           res.sendStatus(200);
@@ -109,13 +118,14 @@ router.get('/allUsers/:username', function(req, res){
   if (err) {
     throw err;
   } 
-  var collection = db.collection('users');
+  var collection = db.collection('users'),
+      i;
   // Locate all the entries using find
     collection.find({ "username": { "$regex": req.params.username, "$options": "i" } }).toArray(function(err, results) {
       if(results.length > 15){
           results = results.slice(0,15);
       }
-
+        
       var usernameArray = [];
       for(i = 0; i < results.length; i++){
           usernameArray.push(results[i].username);
@@ -219,9 +229,12 @@ router.post('/sendPrivateMessage', function(req, res){
       if(err) {
         throw err;
       }
-      var collection = db.collection('users');
-      var sendTo = req.body.sentTo; 
-      var messageID = ObjectID();
+      var collection = db.collection('users'),
+          sendTo = req.body.sentTo,
+          i,
+          messageID = new ObjectID(),
+          ret;
+      
       for(i = 0; i < sendTo.length; i++){
           collection.update(
             { "username" : sendTo[i]},
@@ -229,9 +242,9 @@ router.post('/sendPrivateMessage', function(req, res){
               "dateCreated" : req.body.dateCreated, "text" : req.body.text,
               "responseNum" : 0}}}
           );
-          if(i == sendTo.length - 1){
+          if(i === sendTo.length - 1){
               res.setHeader('Content-Type', 'application/json');
-              var ret = [messageID];
+              ret = [messageID];
               res.send(JSON.stringify(ret));
               db.close();
           }
