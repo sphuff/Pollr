@@ -19,6 +19,7 @@
 #import "PollrNetworkAPI.h"
 #import "LoginViewController.h"
 #import "FriendFeedViewController.h"
+#import "PollrUser.h"
 
 @interface ViewController ()
 
@@ -126,32 +127,39 @@
 
         tabBarController.viewControllers = [NSArray arrayWithObjects:publicNC, friendNC, nil];
         
-        // change navbar title color
-        [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                              [UIColor hx_colorWithHexRGBAString:@"6482AD"], NSForegroundColorAttributeName,
-                                                              nil]];
-        
-        CGFloat frameHeight = self.navigationController.navigationBar.frame.size.height + self.navigationController.navigationBar.frame.origin.y;
-        
-        [UIView animateWithDuration:0.33 animations:^{
-            _popupView.frame = CGRectMake(0, frameHeight, self.view.frame.size.width, self.view.frame.size.height);
-            [_popupView setBackgroundColor:[UIColor hx_colorWithHexRGBAString:@"E4DCDC"]];
-            [_loginButton setAlpha:0.0];
-            [_signupButton setAlpha:0.0];
-            [_loginTextView setAlpha:0.0];
-            
-        } completion:^(BOOL finished) {
-            if(finished){
-                // add username to navbar title
-                [self.navigationItem setTitle:user.username];
-                [self.navigationController pushViewController:tabBarController animated:NO];
-                [self.navigationController setNavigationBarHidden:YES];
+        PollrUser *currentUser = [[PollrUser alloc] init];
+        currentUser.username = user.username;
+        currentUser.email = user.email;
+        currentUser.password = user.password;
+        [_api loginWithUser:currentUser WithCompletionHandler:^(NSInteger statusCode) {
+            if(statusCode == 200){
+                // change navbar title color
+                [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+                                                                      [UIColor hx_colorWithHexRGBAString:@"6482AD"], NSForegroundColorAttributeName,
+                                                                      nil]];
                 
-                _popupView.frame = CGRectMake(0, (3*self.view.frame.size.height)/4, self.view.frame.size.width, (3*self.view.frame.size.height)/4);
-                [_popupView setBackgroundColor:[UIColor whiteColor]];
-                [_loginButton setAlpha:1.0];
-                [_signupButton setAlpha:1.0];
-                [_loginTextView setAlpha:1.0];
+                CGFloat frameHeight = self.navigationController.navigationBar.frame.size.height + self.navigationController.navigationBar.frame.origin.y;
+                
+                [UIView animateWithDuration:0.33 animations:^{
+                    _popupView.frame = CGRectMake(0, frameHeight, self.view.frame.size.width, self.view.frame.size.height);
+                    [_popupView setBackgroundColor:[UIColor hx_colorWithHexRGBAString:@"E4DCDC"]];
+                    [_loginButton setAlpha:0.0];
+                    [_signupButton setAlpha:0.0];
+                    [_loginTextView setAlpha:0.0];
+                } completion:^(BOOL finished) {
+                    if(finished){
+                        // add username to navbar title
+                        [self.navigationItem setTitle:user.username];
+                        [self.navigationController pushViewController:tabBarController animated:NO];
+                        [self.navigationController setNavigationBarHidden:YES];
+                        
+                        _popupView.frame = CGRectMake(0, (3*self.view.frame.size.height)/4, self.view.frame.size.width, (3*self.view.frame.size.height)/4);
+                        [_popupView setBackgroundColor:[UIColor whiteColor]];
+                        [_loginButton setAlpha:1.0];
+                        [_signupButton setAlpha:1.0];
+                        [_loginTextView setAlpha:1.0];
+                    }
+                }];
             }
         }];
     }

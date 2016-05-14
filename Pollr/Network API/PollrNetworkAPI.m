@@ -53,10 +53,10 @@ NSString * const BASE_URL = @"https://pollr.info/api";
 {
     NSString *url = [NSString stringWithFormat:@"%@/authenticate", BASE_URL];
     NSDictionary *paramDict = @{@"username" : user.username, @"password" : user.password};
-    NSError *error;
+
     NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:paramDict error:nil];
-    
-    [_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+    NSString* newStr = [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding];
+    [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         NSHTTPURLResponse *urlResponse = (NSHTTPURLResponse *)response;
         NSDictionary *responseDict = (NSDictionary *)responseObject;
         NSInteger statusCode = [urlResponse statusCode];
@@ -67,7 +67,8 @@ NSString * const BASE_URL = @"https://pollr.info/api";
             NSString *jwt = [responseDict objectForKey:@"token"];
             [[A0SimpleKeychain keychain] setString:jwt forKey:@"auth0-user-jwt"];
         }
-    }];
+        completion(statusCode);
+    }] resume];
 }
 /*
 *   A simple helper method to set the JWT for each network request
@@ -134,17 +135,33 @@ NSString * const BASE_URL = @"https://pollr.info/api";
 }
 
 - (void)signupWithUser:(PollrUser *)user WithContext: (NSManagedObjectContext *)context AndWithCompletionHandler:(void (^)(NSInteger statusCode)) completion {
-    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:user.username, @"username", user.password, @"password", user.email, @"email", nil];
-    NSString *url = [NSString stringWithFormat:@"%@/addUser/", BASE_URL];
-            
-    NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:params error:nil];
-    [self setTokenForHeader:request];
-            
-    [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-        NSHTTPURLResponse *urlResponse = (NSHTTPURLResponse *)response;
-        NSInteger statusCode = [urlResponse statusCode];
-        completion(statusCode);
-    }] resume];
+    PollrUser *signupUser = [PollrUser alloc];
+    signupUser.username = @"signupUser";
+    signupUser.password = @"signuppassword";
+    
+    [self authenticateUser:signupUser WithCompletionHandler:^(NSInteger statusCode) {
+        if(statusCode == 200){
+            [self findUsersWithUsername:user.username WithCompletionHandler:^(NSArray *users) {
+                if([users count] > 0){
+                    completion(401);
+                } else {
+                    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:user.username, @"username", user.password, @"password", user.email, @"email", nil];
+                    NSString *url = [NSString stringWithFormat:@"%@/addUser/", BASE_URL];
+                    
+                    NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:params error:nil];
+                    [self setTokenForHeader:request];
+                    
+                    [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+                        NSHTTPURLResponse *urlResponse = (NSHTTPURLResponse *)response;
+                        NSInteger statusCode = [urlResponse statusCode];
+                        completion(statusCode);
+                    }] resume];
+                }
+            }];
+        } else {
+            completion(statusCode);
+        }
+    }];
 }
 
 - (void)loginWithUser: (PollrUser *)user WithCompletionHandler:(void (^)(NSInteger statusCode)) completion
@@ -202,9 +219,11 @@ NSString * const BASE_URL = @"https://pollr.info/api";
 
 - (void)getPublicMessagesWithCompletionHandler:(void (^)(NSArray *messages)) completion{
     
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc]
-                                    initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/getPublicMessages", BASE_URL]]];
+    NSLog(@"Token %@", [[A0SimpleKeychain keychain] stringForKey:@"token"]);
+    NSString *url = [NSString stringWithFormat:@"%@/getPublicMessages", BASE_URL];
+    NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"GET" URLString:url parameters:nil error:nil];
     [self setTokenForHeader:request];
+    NSLog(@"Header: %@", request.allHTTPHeaderFields);
     
     [[_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         NSArray *messageArray;

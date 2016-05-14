@@ -216,7 +216,11 @@ router.get('/friendsFor:username', function(req, res){
     collection.find({"username": req.params.username}).toArray(function(err, results) {
 
       res.setHeader('Content-Type', 'application/json');
-      res.send(JSON.stringify(results[0].friends));
+      if(results.length == 0){
+        res.send([]);
+      } else {
+        res.send(JSON.stringify(results[0].friends));
+      }
       // Let's close the db
       db.close();
     });
@@ -234,21 +238,23 @@ router.post('/sendPrivateMessage', function(req, res){
           i,
           messageID = new ObjectID(),
           ret;
-      
+      var bulk = collection.initializeUnorderedBulkOp();
+
       for(i = 0; i < sendTo.length; i++){
-          collection.update(
-            { "username" : sendTo[i]},
-            { $push: {messages: {"id" : messageID, "createdBy" : req.body.createdBy,
-              "dateCreated" : req.body.dateCreated, "text" : req.body.text,
-              "responseNum" : 0}}}
+          bulk.find(
+            { "username" : sendTo[i]}).update(
+              { $push: {messages: {"id" : messageID, "createdBy" : req.body.createdBy,
+                "dateCreated" : req.body.dateCreated, "text" : req.body.text,
+                "responseNum" : 0}}}
           );
           if(i === sendTo.length - 1){
               res.setHeader('Content-Type', 'application/json');
               ret = [messageID];
               res.send(JSON.stringify(ret));
-              db.close();
           }
       }
+      bulk.execute();
+      db.close();
   });
 });
 
@@ -311,7 +317,7 @@ router.get('/getPrivateMessagesFor:user', function(req, res){
         {$match : {"username" : req.params.user}}, 
         {$project : {_id : 0, id : "$messages.id", 
         "createdBy" : "$messages.createdBy", "dateCreated": "$messages.dateCreated",
-         "title": "$messages.title", "answers": "$messages.answers"}}
+         "text": "$messages.text", "responseNum": "$messages.responseNum"}}
          ], function(err, results){
               res.setHeader('Content-Type', 'application/json');
               res.send(JSON.stringify(results));

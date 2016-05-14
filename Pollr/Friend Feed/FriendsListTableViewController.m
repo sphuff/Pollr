@@ -53,6 +53,8 @@
     NSLog(@"Pressed send button");
     User *currentUser = [_api getUserWithContext:self.context];
     [_api sendMessage:self.post ToUsers:_selectedFriends fromUser:currentUser];
+    NSLog(@"Sent to users: %@", _selectedFriends);
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 #pragma mark - Table view data source

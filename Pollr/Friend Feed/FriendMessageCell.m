@@ -35,7 +35,7 @@
 }
 
 - (void)setMessage:(NSDictionary *)message{
-    NSString *titleString = [message objectForKey:@"title"];
+    NSString *titleString = [message objectForKey:@"text"];
     NSAttributedString *titleLabelAtt = [[NSAttributedString alloc] initWithString:titleString
                                                                         attributes:@{NSFontAttributeName : [UIFont fontWithName:@"Helvetica" size:17.0],
                                                                                      NSForegroundColorAttributeName: [UIColor whiteColor]}];

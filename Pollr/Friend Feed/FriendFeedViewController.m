@@ -20,6 +20,7 @@
 
 @property (nonatomic, strong) NSArray *messageArray;
 @property (nonatomic, strong) NSMutableArray *colorArray;
+@property (nonatomic, strong) PollrNetworkAPI *api;
 @property (nonatomic, strong) UICollectionView *collectionView;
 
 @end
@@ -38,7 +39,7 @@
     int collectionViewY = self.navigationController.navigationBar.frame.size.height + self.navigationController.navigationBar.frame.origin.y + 100;
     int collectionViewHeight = self.view.frame.size.height - collectionViewY - self.tabBarController.tabBar.frame.size.height;
     _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, collectionViewY, self.view.frame.size.width, collectionViewHeight) collectionViewLayout:flowLayout];
-    [_collectionView setBackgroundColor:[UIColor greenColor]];
+    [_collectionView setBackgroundColor:[UIColor hx_colorWithHexRGBAString:@"BEE99F"]];
     _collectionView.dataSource = self;
     _collectionView.delegate = self;
     
@@ -73,16 +74,28 @@
         [_colorArray addObject:color];
     }
     
-    PollrNetworkAPI *api = [[PollrNetworkAPI alloc] init];
-    User *user = [api getUserWithContext:self.context];
-
-    [api getPrivateMessagesForUser:user WithCompletionHandler:^(NSArray *messages) {
+    _api = [[PollrNetworkAPI alloc] init];
+    User *user = [_api getUserWithContext:self.context];
+    
+    [_api getPrivateMessagesForUser:user WithCompletionHandler:^(NSArray *messages) {
         _messageArray = [NSArray arrayWithArray:messages];
+        NSLog(@"message array: %@", _messageArray);
         [_collectionView reloadData];
     }];
-
     
     [self.view addSubview:_collectionView];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    if(_api){
+        User *user = [_api getUserWithContext:self.context];
+        
+        [_api getPrivateMessagesForUser:user WithCompletionHandler:^(NSArray *messages) {
+            _messageArray = [NSArray arrayWithArray:messages];
+            NSLog(@"message array: %@", _messageArray);
+            [_collectionView reloadData];
+        }];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

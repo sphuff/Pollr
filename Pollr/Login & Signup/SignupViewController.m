@@ -112,7 +112,8 @@
     currentUser.email = [_emailField text];
     
     [_api signupWithUser:currentUser WithContext: _managedObjectContext AndWithCompletionHandler:^(NSInteger statusCode) {
-        if(statusCode == 404){
+        NSLog(@"Status: %ld", (long)statusCode);
+        if(statusCode == 200){
             NSLog(@"Signed Up!");
             User *user = [NSEntityDescription
                                  insertNewObjectForEntityForName:@"User"
@@ -126,7 +127,7 @@
             [self transitionVC];
             
         } else {
-            if(statusCode == 200){
+            if(statusCode == 401){
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Uh Oh" message:@"This username is already in use. Please enter another one." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
                 [alert show];
                 return;

@@ -16,6 +16,7 @@
 
 @property (nonatomic, strong) PollrNetworkAPI *api;
 @property (nonatomic, strong) NSArray *userArray;
+@property (nonatomic, strong) NSMutableArray *friendsArray;
 @property (nonatomic, strong) UITableView *tableView;
 
 @end
@@ -47,6 +48,10 @@
     [self.view addSubview:_tableView];
     
     _api = [[PollrNetworkAPI alloc] init];
+    User *currentUser = [_api getUserWithContext:self.context];
+    [_api getFriendsforUser:currentUser WithCompletionHandler:^(NSArray *friendsArray) {
+        _friendsArray = [NSMutableArray arrayWithArray:friendsArray];
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -63,23 +68,17 @@
     
     [_api addFriend:newFriend forUser:currentUser WithCompletionHandler:^(BOOL successful) {
         if(successful){
-//            [currentUser.friends setByAddingObject:newFriend];
-//            NSError *error;
-//            [self.context save:&error];
-//            
-//            NSLog(@"Data: %@", currentUser.friends);
-//            for (Friend *friend in currentUser.friends) {
-//                NSLog(@"Friend: %@", friend.username);
-//            }
             NSLog(@"Added friend: %@", newFriend.username);
+            [_friendsArray addObject:newFriend.username];
+            [_tableView reloadData];
         } else {
             NSLog(@"Not able to add friend");
         }
     }];
-    
-    [_api getFriendsforUser:currentUser WithCompletionHandler:^(NSArray *friendsArray) {
-        NSLog(@"Friends array: %@", friendsArray);
-    }];
+}
+
+- (void)friendAlreadyAdded:(UIButton *)sender{
+    NSLog(@"You've already added that friend");
 }
 #pragma mark - UITextFieldDelegate Methods
 
@@ -141,12 +140,29 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *identifier = @"addFriendCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
-    [cell.textLabel setText:[_userArray objectAtIndex:[indexPath item]]];
+
+    CGRect frame = [tableView rectForRowAtIndexPath:indexPath];
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithFrame:frame]; // encountered issues with cell reuse
+    // since number of rows are limited to 15, there shouldn't be large performance differences
+    NSString *friendName = [_userArray objectAtIndex:[indexPath item]];
+    [cell.textLabel setText: friendName];
     
-    UIButton *addFriendButton = [[UIButton alloc] initWithFrame:CGRectMake(cell.frame.size.width - cell.frame.size.height, (int)cell.frame.size.height/4, 25, 25)];
-    [addFriendButton setImage:[UIImage imageNamed:@"addBox25px"] forState:UIControlStateNormal];
-    [addFriendButton addTarget:self action:@selector(addFriendButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    BOOL friendAlreadyAdded = NO;
+    for (NSString *friend in _friendsArray) {
+        if([friend isEqualToString:friendName]){
+            friendAlreadyAdded = YES;
+            break;
+        }
+    }
+    
+    UIButton *addFriendButton = [[UIButton alloc] initWithFrame:CGRectMake(cell.frame.size.width, (int)cell.frame.size.height/4, 25, 25)];
+    if (friendAlreadyAdded) {
+        [addFriendButton setImage:[UIImage imageNamed:@"addedBox25px"] forState:UIControlStateNormal];
+        [addFriendButton addTarget:self action:@selector(friendAlreadyAdded:) forControlEvents:UIControlEventTouchUpInside];
+    } else {
+        [addFriendButton setImage:[UIImage imageNamed:@"addBox25px"] forState:UIControlStateNormal];
+        [addFriendButton addTarget:self action:@selector(addFriendButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    }
     addFriendButton.tag = [indexPath item];
     
     [cell addSubview:addFriendButton];

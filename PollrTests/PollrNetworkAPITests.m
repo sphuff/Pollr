@@ -34,7 +34,7 @@
     [super tearDown];
 }
 
-- (void) testUserExists {
+/*- (void) testUserExists {
     PollrUser *user200 = [[PollrUser alloc] init];
     user200.username = @"Test1";
     user200.email = @"email";
@@ -69,7 +69,7 @@
     
     
     [self doNetworkOperationWithArgsandMethods:user200, status200, user404, status404, user401, status401, nil];
-}
+}*/
 
 - (void)testIsValidEmail
 {
