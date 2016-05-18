@@ -234,7 +234,7 @@ router.post('/sendPrivateMessage', function(req, res){
         throw err;
       }
       var collection = db.collection('users'),
-          sendTo = req.body.sentTo,
+          viewers = req.body.viewers, // includes sender
           i,
           messageID = new ObjectID(),
           ret;
@@ -242,12 +242,12 @@ router.post('/sendPrivateMessage', function(req, res){
 
       for(i = 0; i < sendTo.length; i++){
           bulk.find(
-            { "username" : sendTo[i]}).update(
+            { "username" : viewers[i]}).update(
               { $push: {messages: {"id" : messageID, "createdBy" : req.body.createdBy,
                 "dateCreated" : req.body.dateCreated, "text" : req.body.text,
-                "responseNum" : 0}}}
+                "responseNum" : 0, "viewers": viewers}}}
           );
-          if(i === sendTo.length - 1){
+          if(i === viewers.length - 1){
               res.setHeader('Content-Type', 'application/json');
               ret = [messageID];
               res.send(JSON.stringify(ret));

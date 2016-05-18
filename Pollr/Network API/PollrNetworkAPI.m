@@ -259,7 +259,10 @@ NSString * const BASE_URL = @"https://pollr.info/api";
     [dateFormatter setDateFormat:@"HH:mm.ss MM-dd-yyyy"];
     NSString *stringDate = [dateFormatter stringFromDate:[NSDate date]];
     
-    NSDictionary *paramDict = @{@"createdBy": fromUser.username, @"dateCreated" : stringDate, @"text" : message, @"sentTo" : users};
+    NSMutableArray *viewersArray = [NSMutableArray arrayWithArray:users];
+    [viewersArray addObject:fromUser.username];
+    
+    NSDictionary *paramDict = @{@"createdBy": fromUser.username, @"dateCreated" : stringDate, @"text" : message, @"viewers" : viewersArray};
     NSString *url = [NSString stringWithFormat:@"%@/sendPrivateMessage", BASE_URL];
     
     NSMutableURLRequest *request = [[AFJSONRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:paramDict error:nil];

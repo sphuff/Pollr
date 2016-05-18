@@ -15,9 +15,10 @@
 @interface AddFriendViewController ()
 
 @property (nonatomic, strong) PollrNetworkAPI *api;
-@property (nonatomic, strong) NSArray *userArray;
+@property (nonatomic, strong) NSMutableArray *userArray;
 @property (nonatomic, strong) NSMutableArray *friendsArray;
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) User *currentUser;
 
 @end
 
@@ -48,8 +49,8 @@
     [self.view addSubview:_tableView];
     
     _api = [[PollrNetworkAPI alloc] init];
-    User *currentUser = [_api getUserWithContext:self.context];
-    [_api getFriendsforUser:currentUser WithCompletionHandler:^(NSArray *friendsArray) {
+    _currentUser = [_api getUserWithContext:self.context];
+    [_api getFriendsforUser:_currentUser WithCompletionHandler:^(NSArray *friendsArray) {
         _friendsArray = [NSMutableArray arrayWithArray:friendsArray];
     }];
 }
@@ -100,7 +101,10 @@ replacementString:(NSString *)string
         [textField resignFirstResponder];
     }
     [_api findUsersWithUsername:[textField text] WithCompletionHandler:^(NSArray *users) {
-        _userArray = users;
+        _userArray = [NSMutableArray arrayWithArray:users];
+        if([_userArray containsObject:_currentUser.username]){
+            [_userArray removeObject:_currentUser.username];
+        }
         [_tableView reloadData];
     }];
     
@@ -112,7 +116,7 @@ replacementString:(NSString *)string
 - (void)textViewDidChange:(UITextView *)textView
 {
     [_api findUsersWithUsername:[textView text] WithCompletionHandler:^(NSArray *users) {
-        _userArray = users;
+        _userArray = [NSMutableArray arrayWithArray:users];
         [_tableView reloadData];
     }];
 }
