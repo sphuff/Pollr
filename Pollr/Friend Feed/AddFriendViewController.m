@@ -100,13 +100,6 @@ replacementString:(NSString *)string
     if([string isEqualToString:@"\n"]){
         [textField resignFirstResponder];
     }
-    [_api findUsersWithUsername:[textField text] WithCompletionHandler:^(NSArray *users) {
-        _userArray = [NSMutableArray arrayWithArray:users];
-        if([_userArray containsObject:_currentUser.username]){
-            [_userArray removeObject:_currentUser.username];
-        }
-        [_tableView reloadData];
-    }];
     
     return YES;
 }
@@ -117,6 +110,9 @@ replacementString:(NSString *)string
 {
     [_api findUsersWithUsername:[textView text] WithCompletionHandler:^(NSArray *users) {
         _userArray = [NSMutableArray arrayWithArray:users];
+        if([_userArray containsObject:_currentUser.username]){
+            [_userArray removeObject:_currentUser.username];
+        }
         [_tableView reloadData];
     }];
 }
