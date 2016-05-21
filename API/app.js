@@ -240,7 +240,7 @@ router.post('/sendPrivateMessage', function(req, res){
           ret;
       var bulk = collection.initializeUnorderedBulkOp();
 
-      for(i = 0; i < sendTo.length; i++){
+      for(i = 0; i < viewers.length; i++){
           bulk.find(
             { "username" : viewers[i]}).update(
               { $push: {messages: {"id" : messageID, "createdBy" : req.body.createdBy,
@@ -282,7 +282,8 @@ router.post('/sendPublicMessage', function(req, res){
         throw err;
       }
       var collection = db.collection('publicMessages');
-      collection.insert({"createdBy" : req.body.createdBy, "dateCreated" : req.body.dateCreated, "text" : req.body.text}, function (err, results){
+      var messageID = new ObjectID();
+      collection.insert({"createdBy" : req.body.createdBy, "dateCreated" : req.body.dateCreated, "text" : req.body.text, "comments": []}, function (err, results){
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(results));
         db.close();
@@ -317,11 +318,32 @@ router.get('/getPrivateMessagesFor:user', function(req, res){
         {$match : {"username" : req.params.user}}, 
         {$project : {_id : 0, id : "$messages.id", 
         "createdBy" : "$messages.createdBy", "dateCreated": "$messages.dateCreated",
-         "text": "$messages.text", "responseNum": "$messages.responseNum"}}
+         "text": "$messages.text", "responseNum": "$messages.responseNum", "viewers": "$messages.viewers"}}
          ], function(err, results){
               res.setHeader('Content-Type', 'application/json');
               res.send(JSON.stringify(results));
               db.close();
          });
     });
+});
+
+router.post('/addComment', function(req, res){
+    MongoClient.connect(config.database, function(err, db){
+      console.dir("Connected");
+      if(err) {
+        throw err;
+      }
+      var collection = db.collection('publicMessages'),
+          messageID = ObjectID.createFromHexString(req.body.messageID);
+      collection.update(
+          {"_id" : messageID},
+          { $push: {"comments": {"createdBy": req.body.createdBy, "dateCreated": req.body.dateCreated, "text": req.body.text}}}, function (err, results){
+              if(!results){
+                  res.status(404).json({"success" : "false", "message" : "User not found"});
+              } else {
+                  res.status(404).json({"success" : "true", "message" : "User found", "data": results});
+              }
+              db.close();
+      });
+  });
 });
