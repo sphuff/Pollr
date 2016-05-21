@@ -11,7 +11,6 @@
 		DC0D6C1E1C37545000BB1098 /* add_friend.png in Resources */ = {isa = PBXBuildFile; fileRef = DC0D6C1D1C37545000BB1098 /* add_friend.png */; };
 		DC0D6C201C37553A00BB1098 /* add_friend20px.png in Resources */ = {isa = PBXBuildFile; fileRef = DC0D6C1F1C37553A00BB1098 /* add_friend20px.png */; };
 		DC105E791C694ED400A6F8B3 /* MessageFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC105E781C694ED400A6F8B3 /* MessageFeedViewController.m */; };
-		DC308A0A1C71340D00637977 /* AnswerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DC308A091C71340D00637977 /* AnswerCell.m */; };
 		DC3471F31C8E01B900C25AF8 /* pollr_bear_logo.svg in Resources */ = {isa = PBXBuildFile; fileRef = DC3471F21C8E01B900C25AF8 /* pollr_bear_logo.svg */; };
 		DC3471F51C8E053600C25AF8 /* pollr_bear_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = DC3471F41C8E053600C25AF8 /* pollr_bear_logo.png */; };
 		DC3B80411CB6B5B40065BB3E /* FriendMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DC3B80401CB6B5B40065BB3E /* FriendMessageCell.m */; };
@@ -22,6 +21,7 @@
 		DC4412601C73FC030059E5EA /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = DC44125E1C73FC030059E5EA /* Message.m */; };
 		DC4412651C73FCCA0059E5EA /* Answer+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4412621C73FCCA0059E5EA /* Answer+CoreDataProperties.m */; };
 		DC4412661C73FCCA0059E5EA /* Answer.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4412641C73FCCA0059E5EA /* Answer.m */; };
+		DC5078781CF007A60083DF9D /* CommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DC5078771CF007A60083DF9D /* CommentCell.m */; };
 		DC57433C1CB5F4F6008C5B10 /* FriendFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC57433B1CB5F4F6008C5B10 /* FriendFeedViewController.m */; };
 		DC6D83531C98DE0C009FB49C /* airplane50px.png in Resources */ = {isa = PBXBuildFile; fileRef = DC6D83521C98DE0C009FB49C /* airplane50px.png */; };
 		DC6D83551C98E29F009FB49C /* airplane_blue50px.png in Resources */ = {isa = PBXBuildFile; fileRef = DC6D83541C98E29F009FB49C /* airplane_blue50px.png */; };
@@ -95,8 +95,6 @@
 		DC0D6C1F1C37553A00BB1098 /* add_friend20px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add_friend20px.png; sourceTree = "<group>"; };
 		DC105E771C694ED400A6F8B3 /* MessageFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageFeedViewController.h; sourceTree = "<group>"; };
 		DC105E781C694ED400A6F8B3 /* MessageFeedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageFeedViewController.m; sourceTree = "<group>"; };
-		DC308A081C71340D00637977 /* AnswerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnswerCell.h; sourceTree = "<group>"; };
-		DC308A091C71340D00637977 /* AnswerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnswerCell.m; sourceTree = "<group>"; };
 		DC3471F21C8E01B900C25AF8 /* pollr_bear_logo.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = pollr_bear_logo.svg; sourceTree = "<group>"; };
 		DC3471F41C8E053600C25AF8 /* pollr_bear_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pollr_bear_logo.png; sourceTree = "<group>"; };
 		DC3B803F1CB6B5B40065BB3E /* FriendMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendMessageCell.h; sourceTree = "<group>"; };
@@ -113,6 +111,8 @@
 		DC4412621C73FCCA0059E5EA /* Answer+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Answer+CoreDataProperties.m"; sourceTree = "<group>"; };
 		DC4412631C73FCCA0059E5EA /* Answer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Answer.h; sourceTree = "<group>"; };
 		DC4412641C73FCCA0059E5EA /* Answer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Answer.m; sourceTree = "<group>"; };
+		DC5078761CF007A60083DF9D /* CommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentCell.h; sourceTree = "<group>"; };
+		DC5078771CF007A60083DF9D /* CommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentCell.m; sourceTree = "<group>"; };
 		DC57433A1CB5F4F6008C5B10 /* FriendFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendFeedViewController.h; sourceTree = "<group>"; };
 		DC57433B1CB5F4F6008C5B10 /* FriendFeedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendFeedViewController.m; sourceTree = "<group>"; };
 		DC6D83521C98DE0C009FB49C /* airplane50px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = airplane50px.png; sourceTree = "<group>"; };
@@ -391,8 +391,8 @@
 		DCC7D1801C6BEF400050ECBE /* Message Feed */ = {
 			isa = PBXGroup;
 			children = (
-				DC308A081C71340D00637977 /* AnswerCell.h */,
-				DC308A091C71340D00637977 /* AnswerCell.m */,
+				DC5078761CF007A60083DF9D /* CommentCell.h */,
+				DC5078771CF007A60083DF9D /* CommentCell.m */,
 				DC105E771C694ED400A6F8B3 /* MessageFeedViewController.h */,
 				DC105E781C694ED400A6F8B3 /* MessageFeedViewController.m */,
 				DCCB69061C6D22EA00E41614 /* MessageViewController.h */,
@@ -617,13 +617,13 @@
 				DCCB69081C6D22EA00E41614 /* MessageViewController.m in Sources */,
 				DC8DE4E71C753AC700813662 /* User.m in Sources */,
 				DC78F56E1CC0242300759990 /* Friend.m in Sources */,
-				DC308A0A1C71340D00637977 /* AnswerCell.m in Sources */,
 				DC4412651C73FCCA0059E5EA /* Answer+CoreDataProperties.m in Sources */,
 				DC78F56D1CC0242300759990 /* Friend+CoreDataProperties.m in Sources */,
 				DC3B80411CB6B5B40065BB3E /* FriendMessageCell.m in Sources */,
 				DC8DE4DE1C75397F00813662 /* User+CoreDataProperties.m in Sources */,
 				DC4412601C73FC030059E5EA /* Message.m in Sources */,
 				DCBAF1AC1C21ED8400F05D5D /* QuestionViewController.m in Sources */,
+				DC5078781CF007A60083DF9D /* CommentCell.m in Sources */,
 				DCB968F31C23547D00909058 /* SignupViewController.m in Sources */,
 				DC4412571C73A9240059E5EA /* Model.xcdatamodeld in Sources */,
 				DC105E791C694ED400A6F8B3 /* MessageFeedViewController.m in Sources */,

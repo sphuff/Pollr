@@ -9,12 +9,12 @@
 #import "MessageViewController.h"
 #import "Chameleon.h"
 #import "HexColors.h"
-#import "AnswerCell.h"
+#import "CommentCell.h"
 
 @interface MessageViewController()
 
-@property (nonatomic, strong) UITableView *answerTable;
-@property (nonatomic, strong) NSDictionary *answerDict;
+@property (nonatomic, strong) UITableView *commentTable;
+@property (nonatomic, strong) NSArray *commentArray;
 
 @end
 
@@ -30,7 +30,7 @@
     [self.view addSubview:_messageView];
     
     [self.view setBackgroundColor:[UIColor hx_colorWithHexRGBAString:@"E4DCDC"]]; // same color as MessageFeedViewController
-    _answerDict = [_messageDict objectForKey:@"answers"];
+    _commentArray = [_messageDict objectForKey:@"comments"];
 //    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"] style:UIBarButtonItemStyleDone target:self action:nil];
 //    [self.navigationItem setLeftBarButtonItem:backButton];
     
@@ -46,22 +46,22 @@
     int viewWidth = self.view.frame.size.width;
     int viewHeight = self.view.frame.size.height;
     
-    _answerTable = [[UITableView alloc] initWithFrame:CGRectMake(0, viewHeight/2, viewWidth, viewHeight/2)];
-    [self.view addSubview:_answerTable];
-    _answerTable.delegate = self;
-    _answerTable.dataSource = self;
+    _commentTable = [[UITableView alloc] initWithFrame:CGRectMake(0, viewHeight/2, viewWidth, viewHeight/2)];
+    [self.view addSubview:_commentTable];
+    _commentTable.delegate = self;
+    _commentTable.dataSource = self;
     
     
-    [_answerTable registerClass:[AnswerCell class] forCellReuseIdentifier:@"answerCell"];
+    [_commentTable registerClass:[CommentCell class] forCellReuseIdentifier:@"commentCell"];
     
-    [_answerTable setSeparatorInset:UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)];
-    [_answerTable setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
-    [_answerTable reloadData];
+    [_commentTable setSeparatorInset:UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)];
+    [_commentTable setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+    [_commentTable reloadData];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return ceilf(self.view.frame.size.height/6);
+    return ceilf(tableView.frame.size.height/6);
 }
 
 - (void)backButtonPressed{
@@ -72,18 +72,19 @@
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return [_answerDict count];
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [_commentArray count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
-         cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    AnswerCell *cell = [tableView dequeueReusableCellWithIdentifier:@"answerCell" forIndexPath:indexPath];
-
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:@"commentCell" forIndexPath:indexPath];
+    NSDictionary *commentDict = [_commentArray objectAtIndex:indexPath.item];
+    [cell.textLabel setText:[commentDict objectForKey:@"text"]];
     return cell;
 }
 
