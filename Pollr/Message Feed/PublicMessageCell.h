@@ -11,6 +11,7 @@
 @interface PublicMessageCell : UICollectionViewCell
 
 @property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UILabel *userLabel;
 @property (nonatomic, strong) UIImage *userImage;
 @property (nonatomic, strong) UIImageView *userImageView;
 
