@@ -45,7 +45,8 @@
     [self.titleLabel sizeToFit]; // fits label to constraints
     [self.titleLabel setFrame:CGRectMake(self.titleLabel.frame.origin.x, self.titleLabel.frame.origin.y, self.frame.size.width - 20, self.titleLabel.frame.size.height)];
     
-    self.userImage = [UIImage imageNamed:@"user1"];
+    self.userImage = [UIImage imageNamed:[NSString stringWithFormat:@"user%d", 1 + arc4random() % 21]];
+    
     
     NSMutableArray *colorArray = [[NSMutableArray alloc] initWithArray:[NSArray arrayOfColorsWithColorScheme:ColorSchemeTriadic usingColor:self.backgroundColor withFlatScheme:YES]];
     _userImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, self.titleLabel.frame.origin.y + self.titleLabel.frame.size.height +10, 29, 31)];
