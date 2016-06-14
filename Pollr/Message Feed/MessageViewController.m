@@ -15,6 +15,7 @@
 
 @property (nonatomic, strong) UITableView *commentTable;
 @property (nonatomic, strong) NSArray *commentArray;
+@property (nonatomic, strong) UIButton *commentButton;
 
 @end
 
@@ -31,8 +32,7 @@
     
     [self.view setBackgroundColor:[UIColor hx_colorWithHexRGBAString:@"E4DCDC"]]; // same color as MessageFeedViewController
     _commentArray = [_messageDict objectForKey:@"comments"];
-//    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"] style:UIBarButtonItemStyleDone target:self action:nil];
-//    [self.navigationItem setLeftBarButtonItem:backButton];
+    
     
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
     [backButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
@@ -57,6 +57,14 @@
     [_commentTable setSeparatorInset:UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)];
     [_commentTable setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
     [_commentTable reloadData];
+    
+    int buttonHeight = 40;
+    int yCoord = viewHeight/2 - buttonHeight;
+    
+    _commentButton = [[UIButton alloc] initWithFrame:CGRectMake(10, yCoord, buttonHeight, buttonHeight)];
+    [_commentButton setBackgroundColor:[UIColor blackColor]];
+    [_commentButton.layer setCornerRadius:buttonHeight/2.0];
+    [self.view addSubview:_commentButton];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
