@@ -65,6 +65,8 @@
     [_commentButton setBackgroundColor:[UIColor blackColor]];
     [_commentButton.layer setCornerRadius:buttonHeight/2.0];
     [self.view addSubview:_commentButton];
+    
+    [self setUpCardView];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -75,6 +77,32 @@
 - (void)backButtonPressed{
     NSLog(@"Pressed back button");
     [self.navigationController popViewControllerAnimated:NO];
+}
+
+- (void)setUpCardView {
+    int textLabelHeight = self.messageView.frame.size.height/5;
+    UILabel *textLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, self.messageView.frame.size.width, textLabelHeight)];
+    NSAttributedString *textString = [[NSAttributedString alloc] initWithString:[self.messageDict objectForKey:@"text"] attributes: @{NSForegroundColorAttributeName: [UIColor whiteColor], NSFontAttributeName: [UIFont fontWithName:@"Helvetica" size:20.0]}];
+    [textLabel setAttributedText:textString];
+    
+    int userImageViewWidth = self.messageView.frame.size.width/6;
+    NSLog(@"Dict: %@", self.messageDict);
+    UIImageView *userImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, textLabelHeight + textLabel.frame.size.height, userImageViewWidth, userImageViewWidth)];
+    [userImageView.layer setCornerRadius:userImageViewWidth/2.0];
+    [userImageView setImage:[UIImage imageNamed:self.userImageName]];
+    [userImageView setBackgroundColor:[UIColor whiteColor]];
+    [userImageView setContentMode:UIViewContentModeCenter];
+    [userImageView.layer setBorderColor:[UIColor blackColor].CGColor];
+    [userImageView.layer setBorderWidth:3.0];
+    
+    int authorLabelX = userImageView.frame.origin.x + userImageView.frame.size.width + 10;
+    UILabel *authorLabel = [[UILabel alloc] initWithFrame:CGRectMake(authorLabelX, userImageView.frame.origin.y + 10, self.messageView.frame.size.width - authorLabelX, textLabelHeight)];
+    NSAttributedString *authorString = [[NSAttributedString alloc] initWithString:[self.messageDict objectForKey:@"createdBy"] attributes: @{NSForegroundColorAttributeName: [UIColor whiteColor], NSFontAttributeName: [UIFont fontWithName:@"Helvetica" size:17.0]}];
+    [authorLabel setAttributedText:authorString];
+    
+    [self.messageView addSubview:textLabel];
+    [self.messageView addSubview:authorLabel];
+    [self.messageView addSubview:userImageView];
 }
 
 

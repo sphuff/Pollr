@@ -155,6 +155,7 @@
             messageVC.messageView = [[UIView alloc] initWithFrame:CGRectMake(10, navBarHeight + 10, viewWidth - 20, viewHeight/3)];
             [messageVC.messageView setBackgroundColor:cellColor];
             messageVC.messageView.layer.cornerRadius = 5.0;
+            messageVC.userImageName = selectedCell.userImageString;
             
             [self.navigationController pushViewController:messageVC animated:NO];
             [selectedCell setUserInteractionEnabled:YES];

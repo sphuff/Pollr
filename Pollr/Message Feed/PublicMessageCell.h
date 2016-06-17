@@ -13,6 +13,7 @@
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *userLabel;
 @property (nonatomic, strong) UIImage *userImage;
+@property (nonatomic, strong) NSString *userImageString;
 @property (nonatomic, strong) UIImageView *userImageView;
 
 - (void)setMessage:(NSDictionary *)message;

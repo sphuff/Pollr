@@ -13,6 +13,7 @@
 @property (nonatomic, strong) UIView *messageView;
 @property (nonatomic, strong) UIColor *messageViewColor;
 @property (nonatomic, strong) NSDictionary *messageDict;
+@property (nonatomic, strong) NSString *userImageName;
 
 
 -(instancetype) initWithDict:(NSDictionary *)dict;
